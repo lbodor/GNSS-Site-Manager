@@ -1,7 +1,17 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs';
+
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class GlobalService {
+
+    constructor(private http: Http) {
+    }
+
     public selectedSiteId: string = '';
     public isRunning: boolean = false;
 
@@ -36,4 +46,11 @@ export class GlobalService {
         return this.webServiceURL;
     }
 
+    public updateApplication() {
+        console.log('fff');
+        this.http.get('/serviceWorker/clearCache')
+            .subscribe((x: any) => {
+                console.log('ok')
+            });
+    }
 }

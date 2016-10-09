@@ -43,6 +43,7 @@ export class ProjectConfig extends SeedConfig {
       {src: 'ogc-schemas/lib/GEODESYML_0_3.js', inject: 'libs'},
 
       {src: 'sw-toolbox/sw-toolbox.js', inject: 'libs'},
+      {src: 'sw-toolbox/lib/helpers.js', inject: 'libs'},
     ];
 
     this.SYSTEM_CONFIG_DEV.paths['ng2-bootstrap'] =

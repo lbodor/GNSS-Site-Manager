@@ -58,10 +58,10 @@ module.exports = function (config) {
       // Angular itself
       { pattern: 'node_modules/@angular/**/*.js', included: false, watched: true },
       { pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: false },
-
       { pattern: 'dist/dev/**/*.js', included: false, watched: true },
       { pattern: 'dist/dev/**/*.html', included: false, watched: true, served: true },
       { pattern: 'dist/dev/**/*.css', included: false, watched: true, served: true },
+
       { pattern: 'node_modules/systemjs/dist/system-polyfills.js', included: false, watched: false }, // PhantomJS2 (and possibly others) might require it
 
       // suppress annoying 404 warnings for resources, images, etc.
@@ -69,6 +69,13 @@ module.exports = function (config) {
 
       { pattern: 'node_modules/ng2-bootstrap/**/*.js', included: false, watched: false },
       { pattern: 'node_modules/moment/**/*.js', included: false, watched: false },
+      // { pattern: 'node_modules/alertify.js/dist/js/alertify.js', included: false, watched: false },
+      // { pattern: 'node_modules/angular2-notifications/*.js', included: false, watched: false },
+      // { pattern: 'node_modules/angular2-notifications/*.json', included: false, watched: false },
+      { pattern: 'node_modules/angular2-notifications/**/*.js', included: false, watched: false },
+      // { pattern: 'node_modules/angular2-notifications/components.js', included: false, watched: false },
+      // { pattern: 'node_modules/angular2-notifications/package.json', included: false, watched: false },
+      // { pattern: 'node_modules/lodash/**/*.js', included: false, watched: false },
 
       'test-config.js',
       'dist/dev/app/system-config.js',

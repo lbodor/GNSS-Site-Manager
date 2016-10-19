@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class JsonDiffService {
-  private lodash: any = require('lodash');
+  // private lodash: any = require('lodash');
   private ADD: string = 'Add';
   private REMOVE: string = 'Remove';
   private UPDATE: string = 'Update';
@@ -152,9 +152,9 @@ export class JsonDiffService {
 
   private compareObject(oldObj: any, newObj: any, path: any, skipPath: boolean): any {
     let changes: any = [];
-    let oldObjKeys: any = Object.keys(oldObj);
-    let newObjKeys: any = Object.keys(newObj);
-    let intersectionKeys: any = this.lodash.intersection(oldObjKeys, newObjKeys);
+    // let oldObjKeys: any = Object.keys(oldObj);
+    // let newObjKeys: any = Object.keys(newObj);
+    let intersectionKeys: any = 0;  //this.lXXodash.intersection(oldObjKeys, newObjKeys);
     for (let k of intersectionKeys) {
       let newPath: any = skipPath ? path : path.concat([this.addDateString(newObj, k)]);
       let diffs: any = this.compare(oldObj[k], newObj[k], newPath);
@@ -163,7 +163,7 @@ export class JsonDiffService {
       }
     }
 
-    let addedKeys: any = this.lodash.difference(newObjKeys, oldObjKeys);
+    let addedKeys: any = 0;  //this.lXXodash.difference(newObjKeys, oldObjKeys);
     for (let k of addedKeys) {
       let newPath: any = skipPath ? path : path.concat([this.addDateString(newObj, k)]);
       changes.push({
@@ -174,7 +174,7 @@ export class JsonDiffService {
     }
 
     // It won't happen as we don't remove any paths from JSON object
-    let deletedKeys: any = this.lodash.difference(oldObjKeys, newObjKeys);
+    let deletedKeys: any = 0;  //this.lXXodash.difference(oldObjKeys, newObjKeys);
     for (let k of deletedKeys) {
       let newPath: any = skipPath ? path : path.concat([k]);
       changes.push({

@@ -43,8 +43,10 @@ export class ProjectConfig extends SeedConfig {
       {src: 'ogc-schemas/lib/Filter_2_0.js', inject: 'libs'},
       {src: 'ogc-schemas/lib/OWS_1_1_0.js', inject: 'libs'},
       {src: 'ogc-schemas/lib/WFS_2_0.js', inject: 'libs'},
-      {src: 'alertify.js/dist/js/ngAlertify.js', inject: 'libs'},
-      {src: 'lodash/lodash.js', inject: 'libs'},
+      // {src: 'alertify.js/dist/js/ngAlertify.js', inject: 'libs'},
+      // {src: 'angular2-notifications/lib/simple-notifications.component.js', inject: 'libs'},  // components.js
+      {src: 'angular2-notifications/components.js', inject: 'libs'},  // components.js
+      // {src: 'lodash/lodash.js', inject: 'libs'},
     ];
 
     this.SYSTEM_CONFIG_DEV.paths['ng2-bootstrap'] =
@@ -55,21 +57,29 @@ export class ProjectConfig extends SeedConfig {
       defaultExtension : 'js'
     };
 
-    this.SYSTEM_CONFIG_DEV.paths['alertify'] =
-      `${this.APP_BASE}node_modules/alertify.js/dist/js/ngAlertify`;
+    // this.SYSTEM_CONFIG_DEV.paths['alertify'] =
+    //   `${this.APP_BASE}node_modules/alertify.js/dist/js/ngAlertify`;
+    //
+    // this.SYSTEM_BUILDER_CONFIG.packages['alertify'] = {
+    //   main: 'ngAlertify',
+    //   defaultExtension : 'js'
+    // };
 
-    this.SYSTEM_BUILDER_CONFIG.packages['alertify'] = {
-      main: 'ngAlertify',
-      defaultExtension : 'js'
-    };
+    // this.SYSTEM_CONFIG_DEV.paths['angular2-notifications'] =
+    //   `${this.APP_BASE}node_modules/angular2-notifications`;
+    //
+    // this.SYSTEM_BUILDER_CONFIG.packages['angular2-notifications'] = {
+    //   main: 'components.js',
+    //   defaultExtension : 'js'
+    // };
 
-    this.SYSTEM_CONFIG_DEV.paths['lodash'] =
-      `${this.APP_BASE}node_modules/lodash/lodash`;
-
-    this.SYSTEM_BUILDER_CONFIG.packages['lodash'] = {
-      main: 'lodash',
-      defaultExtension : 'js'
-    };
+    // this.SYSTEM_CONFIG_DEV.paths['lodash'] =
+    //   `${this.APP_BASE}node_modules/lodash/lodash`;
+    //
+    // this.SYSTEM_BUILDER_CONFIG.packages['lodash'] = {
+    //   main: 'lodash',
+    //   defaultExtension : 'js'
+    // };
 
     // Add `local` third-party libraries to be injected/bundled.
     this.APP_ASSETS = [

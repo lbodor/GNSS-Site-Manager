@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { GlobalService, CorsSiteService, ServiceWorkerService } from '../shared/index';
+import { NotificationsService } from 'angular2-notifications';
 
 /**
  * This class represents the SelectSiteComponent for searching and selecting CORS sites.
@@ -27,6 +28,11 @@ export class SelectSiteComponent implements OnInit {
     {name: 'name', sort: ''}
   ];
 
+    public options = {
+        position: ['bottom', 'left'],
+        timeOut: 5000,
+        lastOnBottom: true
+    };
 
   /**
    * Creates an instance of the SelectSiteComponent with the injected CorsSiteService.
@@ -37,7 +43,8 @@ export class SelectSiteComponent implements OnInit {
    * @param {GlobalService} globalService - common constants and methods
    */
   constructor(public router: Router, public corsSiteService: CorsSiteService,
-      private globalService: GlobalService, private serviceWorkerService: ServiceWorkerService) { }
+      private globalService: GlobalService, private serviceWorkerService: ServiceWorkerService,
+              private notificationsService: NotificationsService) { }
 
   /**
    * Initialize relevant variables when the directive is instantiated
@@ -62,6 +69,7 @@ export class SelectSiteComponent implements OnInit {
    * Note: use ngModelChange event as it includes "keyup" event, paste and selection from dropdown hints.
    */
   public onSiteIdChange(value: string) {
+    this.notificationsService.success('Notification', 'Body of that');
     this.fourCharacterId = value;
     if (this.fourCharacterId === null || this.fourCharacterId.trim() === '') {
       if (this.siteName === null || this.siteName.trim() === '') {

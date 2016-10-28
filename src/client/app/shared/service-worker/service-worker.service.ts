@@ -33,13 +33,10 @@ export class ServiceWorkerService {
     return this.postMessage({operation: 'get_cache'});
   }
 
-  /**
-   * Generic method to post messages to the service worker and return a promise to the caller
-   * @param operation to be performed
-   * @param message is the optional message to be sent with that operation
-   * @returns {Promise<T>} that is appropriate to the client of this method
-   */
-
+  deleteCacheEntry(url: string): Promise<boolean> {
+    let message: MessageObject = { message: url, operation: 'delete_cache_entry'};
+    return this.postMessage(message);
+  }
 
   /**
    * Generic method to post messages to the service worker and return a promise to the caller

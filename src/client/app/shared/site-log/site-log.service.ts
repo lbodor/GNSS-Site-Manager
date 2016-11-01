@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Request, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -166,12 +166,13 @@ export class SiteLogService {
   private getGETForgetSiteLogByFourCharacterIdUsingGeodesyML(siteId: string) {
     return this.constantsService.getWebServiceURL()
       + '/siteLogs/search/findByFourCharacterId?id=' + siteId + '&format=geodesyml';
-
   }
 
   /**
    * This will cache a GET that will return the data POSTED, and which is the same GET as what was used to retrive the siteInfo
    * This is necessary as the ServiceWorker won't cache POSTs so we must update the resource.
+   *
+   * TODO - this fails for OFFLINE, as when Offline the POST is NOT a success!  Fix.
    * @param response
    * @param siteId
    * @returns {any}
@@ -180,11 +181,18 @@ export class SiteLogService {
     console.debug('SiteLogService - handleSuccess - siteId: ', siteId);
     // Need to build what a GET will be for this same resource
     let url: string = this.getGETForgetSiteLogByFourCharacterIdUsingGeodesyML(siteId);
+    let request: Request  = this.getGETRequest(url);  // {method: string, url: string}
     console.debug('SiteLogService - handleSuccess - url: ', url);
-    this.serviceWorkerService.deleteCacheEntry(url).then(
+    this.serviceWorkerService.updateCacheEntry(request, response).then(
       (success: any) => {console.log('success calling serviceWorkerService.deleteCacheEntry - url: ', url);},
       (error: Error) => {console.error('error calling serviceWorkerService.deleteCacheEntry(url:'+url+')', error);}
     );
     return response.json();
+  }
+
+  getGETRequest(url: string): Request {
+    return new Request({
+      method: RequestMethod.Get,
+      url: url});
   }
 }

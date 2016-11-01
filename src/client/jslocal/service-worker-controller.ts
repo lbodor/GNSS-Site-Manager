@@ -98,6 +98,8 @@ self.addEventListener('fetch', (event: FetchEvent) => {
           } else if (event.request.method.toString() === 'POST') {
             // DEBUG for GEOD-232
             console.debug('  POST fetch event - url: ', event.request.url.toString());
+            // let url = getServiceOfInterest(event.request.url.toString());
+            // PERSUING not going through POST as can't interact with the App - using 'update_cache_entry' message from the Service
           }
           return response;
         });
@@ -149,7 +151,7 @@ function getCache(event: MessageEvent): Promise<string[]> {
  * @param url
  * @returns: promise<boolean> - true if deleted an entry
  */
-function deleteCacheEntry(url: string) {
+function deleteCacheEntry(url: string): Promise<boolean> {
   console.log('deleteCacheEntry - url: ', url);
   return new Promise((resolve: Function, reject: Function) => {
     self.caches.has(cacheName).then(() => {
@@ -158,7 +160,7 @@ function deleteCacheEntry(url: string) {
           cacheKeys.map((request: Request) => {
             let requestUrl: string = request.url.toString().toLowerCase();
             // console.debug('  deleteCacheEntry - consider cache entry: ' + requestUrl);
-            if (requestUrl.length == url.length && requestUrl.includes(url.toLowerCase())) {
+            if (requestUrl.length === url.length && requestUrl.includes(url.toLowerCase())) {
               console.debug('deleteCacheEntry - do so for url: ', url);
               cache.delete(request);
             }
@@ -176,6 +178,28 @@ function deleteCacheEntry(url: string) {
     }, (error: Error) => {
       console.error('deleteCacheEntry - self.caches.has error: ', error);
       reject(error);
+    });
+  });
+}
+
+/**
+ * Update the cache at url with a clone of the given response
+ * @param url - key in cache
+ * @param response - new data
+ */
+function updateCacheEntry(request: Request, response: Response): Promise<boolean> {
+  console.debug('updateCacheEntry - url: '+ request.url + ', reponse: ', response);
+  return new Promise((resolve: Function, reject: Function) => {
+    self.caches.open(cacheName).then((cache: Cache) => {
+      cache.put(request, response.clone()).then(
+        () => {
+          console.debug('updateCacheEntry success: ', request.url);
+          resolve(true);
+        },
+        (error: Error) => {
+          console.error('updateCacheEntry error for url: ' + request.url + ' - ', error);
+          reject(false);
+        });
     });
   });
 }
@@ -201,6 +225,9 @@ self.addEventListener('message', (event: MessageEvent) => {
     });
   } else if (operation === 'delete_cache_entry') {
     deleteCacheEntry(messageObject.message);
+  } else if (operation === 'update_cache_entry') {
+    // the message is a stringified request object
+    updateCacheEntry(JSON.parse(messageObject.message), messageObject.object);
   } else {
     console.log('UNKNOWN MESSAGE TYPE');
   }

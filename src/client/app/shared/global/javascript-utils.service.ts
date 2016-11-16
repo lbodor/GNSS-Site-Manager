@@ -9,7 +9,7 @@ export class JavascriptUtilsService {
    * @param path in object structure - eg 'a.b.1' (array indices are .X)
    * @returns boolean - if created empty object (true) or it existed (false).
    */
-  public checkObjectPathCreateEmpty(obj: any, path: string) {
+  public ensureCreatePath(obj: any, path: string): boolean {
     if (! obj) {
       throw new Error('Object cant be empty');
     }
@@ -26,7 +26,7 @@ export class JavascriptUtilsService {
       } else {
         accumulativePath = 'p';
       }
-      let anyExistingObj = this.checkObjectPathExists(obj, accumulativePath);
+      let anyExistingObj = this.ensurePathExists(obj, accumulativePath);
       if (! anyExistingObj) {
         lastExistingObj[p] = {};
       } else {
@@ -44,7 +44,7 @@ export class JavascriptUtilsService {
    * @param path in object structure - eg 'a.b.1' (array indices are .X)
    * @returns {string} eg. 'wilma' or undefined if path doens't exist
    */
-  public checkObjectPathExists(obj: any, path: string) {
+  public ensurePathExists(obj: any, path: string): any {
     let a: any = path.split('.').reduce(function (prev, curr) {
       return prev ? prev[curr] : undefined;
     }, obj || self);

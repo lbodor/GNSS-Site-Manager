@@ -4,39 +4,53 @@ import { ReflectiveInjector } from '@angular/core';
 import { JavascriptUtilsService } from './javascript-utils.service';
 
 export function main() {
-    describe('Javascript Utils Service', () => {
-        let javascriptUtilsService: JavascriptUtilsService;
-        let obj: any = {a: {b: {c: [1, 2]}}};
+  fdescribe('Javascript Utils Service', () => {
+    let javascriptUtilsService: JavascriptUtilsService;
+    let obj: any = {a: {b: {c: [1, 2]}}};
 
-        beforeEach(() => {
+    beforeEach(() => {
 
-            let injector = ReflectiveInjector.resolveAndCreate([
-                JavascriptUtilsService,
-                // BaseRequestOptions,
-                // MockBackend,
-                // {
-                //     provide: Http,
-                //     useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions) {
-                //         return new Http(backend, defaultOptions);
-                //     },
-                //     deps: [MockBackend, BaseRequestOptions]
-                // },
-            ]);
-            javascriptUtilsService = injector.get(JavascriptUtilsService);
-        });
-
-        it('should be defined', () => {
-            expect(javascriptUtilsService).not.toBeUndefined();
-        });
-
-        it('should run checkObjectPathCreateEmpty check', () => {
-            let x: any = javascriptUtilsService.checkObjectPathCreateEmpty(obj, 'a');
-            expect(x).toEqual(false);
-        });
-
-        it('should run checkObjectPathCreateEmpty create', () => {
-            let x: any = javascriptUtilsService.checkObjectPathCreateEmpty(obj, 'a.d');
-            expect(x).toEqual(true);
-        });
+      let injector = ReflectiveInjector.resolveAndCreate([
+        JavascriptUtilsService,
+        // BaseRequestOptions,
+        // MockBackend,
+        // {
+        //     provide: Http,
+        //     useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions) {
+        //         return new Http(backend, defaultOptions);
+        //     },
+        //     deps: [MockBackend, BaseRequestOptions]
+        // },
+      ]);
+      javascriptUtilsService = injector.get(JavascriptUtilsService);
     });
+
+    it('should be defined', () => {
+      expect(javascriptUtilsService).not.toBeUndefined();
+    });
+
+    fit('should run ensurePathExists and succeed', () => {
+        let x: any = javascriptUtilsService.ensurePathExists(obj, 'a.b');
+        expect(x).toBeDefined();
+      });
+
+    fit ('should run ensurePathExists and fail', () => {
+        let x: any = javascriptUtilsService.ensurePathExists(obj, 'a.doestexist');
+        expect(x).not.toBeDefined();
+      });
+
+    it('should run checkObjectPathCreateEmpty check', () => {
+      let x: any = javascriptUtilsService.ensureCreatePath();  // todo fix
+      expect(x).toEqual(false);
+    });
+
+    it('should run checkObjectPathCreateEmpty create', () => {
+      let x: any = javascriptUtilsService.ensureCreatePath(obj, 'a.d');
+      expect(x).toEqual(true);
+    });
+  });
 }
+
+// a.b.c.d
+// a : {b: {c: { d: {}}}}
+

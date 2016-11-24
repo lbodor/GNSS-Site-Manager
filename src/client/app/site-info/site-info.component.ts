@@ -133,10 +133,10 @@ export class SiteInfoComponent implements OnInit, OnDestroy {
           this.siteLocation = this.jsonCheckService.getValidSiteLocation(this.siteLogModel.siteLocation);
           this.siteContacts = [];
           for (let contact of this.siteLogModel.siteContact) {
-            this.siteContacts.push(this.jsonCheckService.getValidSiteContact(contact.ciResponsibleParty));
+            this.siteContacts.push(this.jsonCheckService.getValidContact(contact.ciResponsibleParty));
           }
           this.metadataCustodian = this.jsonCheckService
-                  .getValidMetadataCustodian(this.siteLogModel.siteMetadataCustodian.ciResponsibleParty);
+                  .getValidContact(this.siteLogModel.siteMetadataCustodian.ciResponsibleParty);
           this.setGnssReceivers(this.siteLogModel.gnssReceivers);
           this.setGnssAntennas(this.siteLogModel.gnssAntennas);
           this.setFrequencyStandards(this.siteLogModel.frequencyStandards);
@@ -201,7 +201,7 @@ export class SiteInfoComponent implements OnInit, OnDestroy {
     }
 
     // Assign a new SiteContact object to both original and backup models for comparison
-    let newSiteContact = this.jsonCheckService.getNewSiteContact();
+    let newSiteContact = this.jsonCheckService.getNewContact();
     let siteContactObjCopy: any = this.miscUtilsService.cloneJsonObj(siteContactObj);
     siteContactObjCopy.siteContact = this.miscUtilsService.cloneJsonObj(newSiteContact);
     this.siteLogOrigin.siteContact.unshift(siteContactObjCopy);

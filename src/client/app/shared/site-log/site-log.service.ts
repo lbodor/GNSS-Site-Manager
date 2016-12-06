@@ -7,7 +7,7 @@ import {JsonixService} from '../jsonix/jsonix.service';
 import {WFSService, SelectSiteSearchType} from '../wfs/wfs.service';
 import {HttpUtilsService} from '../global/http-utils.service';
 import {ConstantsService} from '../global/constants.service';
-import {JsonViewModelService} from '../jsonViewModel/json-view-model.service';
+import {JsonViewModelService} from '../json-data-view-model/json-view-model.service';
 
 /**
  * This class provides the service with methods to retrieve CORS Setup info from DB.

@@ -1,13 +1,14 @@
-import {Injectable} from '@angular/core';
 // import {Response} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
 // import 'rxjs/add/operator/map';
 // import 'rxjs/add/operator/catch';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Rx';
 import {SiteLogModel} from './SiteLogDataModel';
 import {HttpUtilsService} from '../global/http-utils.service';
 import {Subscriber} from 'rxjs';
-import {SiteIdentification} from './SiteIdentification';
-import {SiteLocation} from './SiteLocation';
+import {HumiditySensorsViewModel} from '../../humidity-sensor/humiditySensor-view-model';
+// import {SiteIdentification} from './SiteIdentification';
+// import {SiteLocation} from './SiteLocation';
 // import {SiteLogModel} from './SiteLogModel';
 
 /**
@@ -77,16 +78,18 @@ export class JsonViewModelService {
       let siteLogViewModel: SiteLogModel = <SiteLogModel>{};
       console.debug('siteLogViewModel (have to do something with this):', siteLogViewModel);
 
-      siteLogViewModel.siteIdentification = SiteIdentification.translateDataToView(siteLogDataModel);
-      siteLogViewModel.siteLocation = SiteLocation.translateDataToView(siteLogDataModel);
-      console.debug('translateToView subscribe fn - siteIdentification: ', siteLogViewModel.siteIdentification);
+      // siteLogViewModel.siteIdentification = SiteIdentification.translateDataToView(siteLogDataModel);
+      // siteLogViewModel.siteLocation = SiteLocation.translateDataToView(siteLogDataModel);
       // siteLogViewModel.siteIdentification = SiteIdentification.translateDataToView(siteLogDataModel);
       // siteLogViewModel.siteLocation = SiteLocation.translateDataToView(siteLogDataModel);
       // siteLogViewModel.gnssReceivers = GnssReceivers.translateDataToView(siteLogDataModel);
       // siteLogViewModel.gnssAntennas = GnssAntennas.translateDataToView(siteLogDataModel);
       // siteLogViewModel.surveyedLocalTies = SurveyedLocalTies.translateDataToView(siteLogDataModel);
       // siteLogViewModel.frequencyStandards = FrequencyStandards.translateDataToView(siteLogDataModel);
-      // siteLogViewModel.humiditySensors = HumiditySensors.translateDataToView(siteLogDataModel);
+      let humiditySensorsViewModel: HumiditySensorsViewModel = new HumiditySensorsViewModel();
+      humiditySensorsViewModel.setFromDataModel(siteLogDataModel.humiditySensors);
+      // siteLogViewModel.humiditySensors =
+      //   console.debug('translateToView subscribe fn - siteIdentification: ', siteLogViewModel.siteIdentification);
       // siteLogViewModel.pressureSensors = PressureSensors.translateDataToView(siteLogDataModel);
       // siteLogViewModel.temperatureSensors = TemperatureSensors.translateDataToView(siteLogDataModel);
       // siteLogViewModel.waterVaporSensors = WaterVaporSensors.translateDataToView(siteLogDataModel);

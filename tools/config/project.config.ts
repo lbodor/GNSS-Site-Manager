@@ -43,27 +43,8 @@ export class ProjectConfig extends SeedConfig {
       {src: 'ogc-schemas/lib/Filter_2_0.js', inject: 'libs'},
       {src: 'ogc-schemas/lib/OWS_1_1_0.js', inject: 'libs'},
       {src: 'ogc-schemas/lib/WFS_2_0.js', inject: 'libs'},
-      {src: 'lodash/lodash.js', inject: 'libs'},
-      {src: 'foreach/index.js', inject: 'libs'},
-      {src: 'angular2-notifications/components.js', inject: 'libs'},
-
+      //{src: 'angular2-notifications/components.js', inject: 'libs'}
     ];
-
-    this.SYSTEM_CONFIG_DEV.paths['ng2-bootstrap'] =
-      `${this.APP_BASE}node_modules/ng2-bootstrap/ng2-bootstrap`;
-
-    this.SYSTEM_BUILDER_CONFIG.packages['ng2-bootstrap'] = {
-      main: 'ng2-bootstrap',
-      defaultExtension : 'js'
-    };
-
-    this.SYSTEM_CONFIG_DEV.paths['lodash'] =
-      `${this.APP_BASE}node_modules/lodash/lodash`;
-
-    this.SYSTEM_BUILDER_CONFIG.packages['lodash'] = {
-      main: 'lodash',
-      defaultExtension : 'js'
-    };
 
     this.SYSTEM_CONFIG_DEV.paths['foreach'] =
       `${this.APP_BASE}node_modules/foreach`;
@@ -73,13 +54,8 @@ export class ProjectConfig extends SeedConfig {
       defaultExtension : 'js'
     };
 
-    this.SYSTEM_CONFIG_DEV.paths['angular2-notifications'] =
-      `${this.APP_BASE}node_modules/angular2-notifications`;
-
-    this.SYSTEM_BUILDER_CONFIG.packages['angular2-notifications'] = {
-      main: 'components',
-      defaultExtension : 'js'
-    };
+//    this.SYSTEM_CONFIG_DEV.paths['angular2-notifications'] =
+//      `${this.APP_BASE}node_modules/angular2-notifications`;
 
     // Add `local` third-party libraries to be injected/bundled.
     this.APP_ASSETS = [

@@ -1,4 +1,5 @@
 import { Component, ViewContainerRef } from '@angular/core';
+import { NotificationsService } from 'angular2-notifications';
 import { Config, CorsSiteService, CorsSetupService, SiteLogService, DialogService, MiscUtilsService,
           JsonDiffService, JsonCheckService, JsonPointerService, NameListService, ServiceWorkerService,
           JsonixService } from './shared/index';
@@ -29,8 +30,27 @@ import { SiteInfoComponent } from './site-info/site-info.component';
 })
 
 export class AppComponent {
-  constructor(private siteInfo: SiteInfoComponent, private viewContainerRef: ViewContainerRef) {
+
+  public toastNotificationsOptions: any = {
+    timeOut: 5000,
+    lastOnBottom: true,
+    clickToClose: true,
+    maxLength: 0,
+    maxStack: 7,
+    showProgressBar: true,
+    pauseOnHover: true,
+    preventDuplicates: false,
+    preventLastDuplicates: 'visible',
+    rtl: false,
+    animate: 'scale',
+    position: ['right', 'bottom']
+  };
+
+constructor(private siteInfo: SiteInfoComponent,
+		  private viewContainerRef: ViewContainerRef,
+		  private notificationsService: NotificationsService) {
     console.log('Environment config', Config);
+
   }
 
   /**

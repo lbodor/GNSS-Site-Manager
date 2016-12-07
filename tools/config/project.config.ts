@@ -46,7 +46,7 @@ export class ProjectConfig extends SeedConfig {
       {src: 'alertify.js/dist/js/ngAlertify.js', inject: 'libs'},
       {src: 'lodash/lodash.js', inject: 'libs'},
       {src: 'foreach/index.js', inject: 'libs'},
-      {src: 'json-pointer/index.js', inject: 'libs'},
+      // {src: 'json-pointer/index.js', inject: 'libs'},
     ];
 
     this.SYSTEM_CONFIG_DEV.paths['ng2-bootstrap'] =

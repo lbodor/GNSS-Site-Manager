@@ -1,95 +1,75 @@
-// export interface BeginPosition {
-//   value: string[];
-// }
-//
-// export interface EndPosition {
-//   value: string[];
-// }
-//
-// export interface TimePeriod {
-//   beginPosition: BeginPosition;
-//   endPosition: EndPosition;
-// }
-//
-// export interface AbstractTimePrimitive {
-//   'gml:TimePeriod': TimePeriod;
-// }
-//
-// export interface ValidTime {
-//   abstractTimePrimitive: AbstractTimePrimitive;
-// }
-//
-// export interface ValidTime2 {
-//   TYPE_NAME: string;
-//   value: string[];
-// }
-
-// import {SiteLogDataModel} from '../shared/json-data-view-model/data-model/SiteLogDataModel';
-import {JsonPointerService} from '../shared/json-pointer/json-pointer.service';
+import {JsonPointerService as JPS} from '../shared/json-pointer/json-pointer.service';
 
 /**
  * View Model class and methods to translate to/from the Data Model (from JSON from the GeodesyML)
  */
 export class HumiditySensorsViewModel {
-  private _humiditySensorPropertyViewModels: HumiditySensorPropertyViewModel[];
-  // private humiditySensorsPath: string = '/humiditySensors';
-
-  // constructor() {
-  //   this.humiditySensorPropertyViewModels = [];
-  // }
+  /**
+   * Not the best form making private fields public, though saves clutter of creating accessors / getters for all
+   */
+  public humiditySensors: HumiditySensorPropertyViewModel[];
 
   constructor(humiditySensorPropertyViewModels?: HumiditySensorPropertyViewModel[]) {
-    this.humiditySensorPropertyViewModels = humiditySensorPropertyViewModels;
+    this._humiditySensors = humiditySensorPropertyViewModels;
   }
 
-  set humiditySensorPropertyViewModels(existing: HumiditySensorPropertyViewModel[]) {
+  set _humiditySensors(existing: HumiditySensorPropertyViewModel[]) {
     if (existing) {
-      this._humiditySensorPropertyViewModels = existing;
+      this.humiditySensors = existing;
     } else {
-      this._humiditySensorPropertyViewModels = [];
+      this.humiditySensors = [];
     }
   }
 
-  get humiditySensorPropertyViewModels() {
-    return this._humiditySensorPropertyViewModels;
-  }
-
-  setFromDataModel(humiditySensorPropertyDataModels: any) {
+  /**
+   * Create this class and descendants from a JSON (from GeodesyML) object.
+   *
+   * @param humiditySensorPropertyDataModels with source data
+   * @return this
+   */
+  createFromDataModel(humiditySensorPropertyDataModels: any): HumiditySensorsViewModel {
     for (let humiditySensorsPropertyDataModel of humiditySensorPropertyDataModels)
-      this.humiditySensorPropertyViewModels.push(
-        new HumiditySensorPropertyViewModel().setFromDataModel(humiditySensorsPropertyDataModel));
+      this.humiditySensors.push(
+        new HumiditySensorPropertyViewModel().createFromDataModel(humiditySensorsPropertyDataModel));
+
+    return this;
   }
 
-  setDataModel(humiditySensorPropertyDataModels: any) {
-    humiditySensorPropertyDataModels.length = 0;
-    for (let humiditySensorPropertyViewModel of this.humiditySensorPropertyViewModels) {
-      let humiditySensorPropertyDataModel: any;
+  /**
+   * Extract the data here as a source JSON (from GeodesyML) object
+   * @param humiditySensorPropertyDataModels to populate
+   * @return humiditySensorPropertyDataModels given as a param (populated).  Be aware that even though the param is
+   * populated, if upon entry it is undefined then the param will remain undefined in the caller.
+   */
+  setDataModel(humiditySensorPropertyDataModels: any): any {
+    if (humiditySensorPropertyDataModels) {
+      humiditySensorPropertyDataModels.length = 0;
+    } else {
+      humiditySensorPropertyDataModels=[];
+    }
+    for (let humiditySensorPropertyViewModel of this.humiditySensors) {
+      let humiditySensorPropertyDataModel: any = {};
       humiditySensorPropertyViewModel.setDataModel(humiditySensorPropertyDataModel);
       humiditySensorPropertyDataModels.push(humiditySensorPropertyDataModel);
     }
-  }
 
-  toJSON(): any {
-
+    return humiditySensorPropertyDataModels;
   }
 }
 
-export class HumiditySensorPropertyViewModel {
-  private _dateDeleted: string;
-  private _dateInserted: string;
-  private _deletedReason: string;
-  private _humiditySensor: HumiditySensorViewModel;
-  private dateDeletedPath: string = '/dateDeleted/value/0';
-  private dateInsertedPath: string = '/dateInserted/value/0';
-  private deletedReasonPath: string = '/deletedReason';
-  private humiditySensorPath: string = '/humiditySensor';
+let dateDeletedPath: string = '/dateDeleted/value/0';
+let dateInsertedPath: string = '/dateInserted/value/0';
+let deletedReasonPath: string = '/deletedReason';
+let humiditySensorPath: string = '/humiditySensor';
 
-  // constructor() {
-  //   this.dateDeleted = '';
-  //   this.dateInserted = '';
-  //   this.deletedReason = '';
-  //   this.humiditySensor = new HumiditySensorViewModel();
-  // }
+export class HumiditySensorPropertyViewModel {
+  /**
+   * Not the best form making private fields public, though saves clutter of creating accessors / getters for all
+   */
+  public dateDeleted: string;
+  public dateInserted: string;
+  public deletedReason: string;
+  public humiditySensor: HumiditySensorViewModel;
 
   constructor(existing?: HumiditySensorPropertyViewModel) {
     this.dateDeleted = existing && existing.dateDeleted || '';
@@ -98,307 +78,118 @@ export class HumiditySensorPropertyViewModel {
     this.humiditySensor = existing && existing.humiditySensor || new HumiditySensorViewModel(null);
   }
 
-  set dateDeleted(val: string) {
-    if (val) {
-      this._dateDeleted = val;
-    }
-  }
-
-  get dateDeleted(): string {
-    return this._dateDeleted;
-  }
-
-  set dateInserted(val: string) {
-    if (val) {
-      this._dateInserted = val;
-    }
-  }
-
-  get dateInserted(): string {
-    return this._dateInserted;
-  }
-
-  set deletedReason(val: string) {
-    if (val) {
-      this._deletedReason = val;
-    }
-  }
-
-  get deletedReason(): string {
-    return this._deletedReason;
-  }
-
-  set humiditySensor(val: HumiditySensorViewModel) {
-    if (val) {
-      this._humiditySensor = val;//.setFromExisting(val);
-    }
-  }
-
-  get humiditySensor(): HumiditySensorViewModel {
-    return this._humiditySensor;
-  }
-
-  setFromDataModel(humiditySensorPropertyDataModel: any): HumiditySensorPropertyViewModel {
-    this.dateDeleted = JsonPointerService.getString(humiditySensorPropertyDataModel, this.dateDeletedPath);
-    this.dateInserted = JsonPointerService.getString(humiditySensorPropertyDataModel, this.dateInsertedPath);
-    this.deletedReason = JsonPointerService.getString(humiditySensorPropertyDataModel, this.deletedReasonPath);
-    this.humiditySensor = JsonPointerService.get(humiditySensorPropertyDataModel, this.humiditySensorPath);
+  /**
+   * Create this class and descendants from a JSON (from GeodesyML) object.
+   *
+   * @param humiditySensorPropertyDataModel with source data
+   * @return this
+   */
+  createFromDataModel(humiditySensorPropertyDataModel: any): HumiditySensorPropertyViewModel {
+    this.dateDeleted = JPS.getString(humiditySensorPropertyDataModel, dateDeletedPath);
+    this.dateInserted = JPS.getString(humiditySensorPropertyDataModel, dateInsertedPath);
+    this.deletedReason = JPS.getString(humiditySensorPropertyDataModel, deletedReasonPath);
+    this.humiditySensor.createFromDataModel(JPS.get(humiditySensorPropertyDataModel, humiditySensorPath));
 
     return this;
   }
 
-  toJSON(): any {
-
-  }
-
+  /**
+   * Extract the data here as a source JSON (from GeodesyML) object
+   * @param humiditySensorPropertyDataModels to populate
+   * @return humiditySensorPropertyDataModels given as a param (populated)
+   */
   setDataModel(humiditySensorPropertyDataModel: any) {
-    JsonPointerService.set(humiditySensorPropertyDataModel, this.dateDeletedPath, this.dateDeleted);
-    JsonPointerService.set(humiditySensorPropertyDataModel, this.dateInsertedPath, this.dateInserted);
-    JsonPointerService.set(humiditySensorPropertyDataModel, this.deletedReasonPath, this.deletedReason);
-    this.humiditySensor.setDataModel(JsonPointerService.get(humiditySensorPropertyDataModel, this.humiditySensorPath));
+    JPS.set(humiditySensorPropertyDataModel, dateDeletedPath, this.dateDeleted);
+    JPS.set(humiditySensorPropertyDataModel, dateInsertedPath, this.dateInserted);
+    JPS.set(humiditySensorPropertyDataModel, deletedReasonPath, this.deletedReason);
+    if (! JPS.get(humiditySensorPropertyDataModel, humiditySensorPath)) {
+      humiditySensorPropertyDataModel.humiditySensor = {};
+    }
+    this.humiditySensor.setDataModel(JPS.get(humiditySensorPropertyDataModel, humiditySensorPath));
 
     return humiditySensorPropertyDataModel;
   }
 }
 
+let beginPosPath: string = '/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0';
+let endPosPath: string = '/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0';
+let calibrationDatePath: string = '/calibrationDate/value/0';
+let dataSamplingIntervalPath: string = '/dataSamplingInterval';
+let accuracyPercentRHPath: string = '/accuracyPercentRelativeHumidity';
+let aspirationPath: string = '/aspiration';
+let notesPath: string = '/notes';
+let manufacturerPath: string = '/manufacturer';
+let serialNumberPath: string = '/serialNumber';
+let heightDiffToAntennaPath: string = '/heightDiffToAntenna';
+
 export class HumiditySensorViewModel {
-  private _startDate: string;
-  private _endDate: string;
+  /**
+   * Not the best form making private fields public, though saves clutter of creating accessors / getters for all
+   */
+  public startDate: string;
+  public endDate: string;
 
-  private _calibrationDate: string;
+  public calibrationDate: string;
 
-  private _dataSamplingInterval: number;
-  private _accuracyPercentRelativeHumidity: number;
-  private _aspiration: string;
-  private _notes: string;
-  private _manufacturer: string;
-  private _serialNumber: string;
-  private _heightDiffToAntenna: number;
-  private beginPosPath: string = '/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0';
-  private endPosPath: string = '/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0';
-  private calibrationDatePath: string = '/calibrationDate/value/0';
-  private dataSamplingIntervalPath: string = '/dataSamplingInterval';
-  private accuracyPercentRHPath: string = '/accuracyPercentRelativeHumidity';
-  private aspirationPath: string = '/aspiration';
-  private notesPath: string = '/notes';
-  private manufacturerPath: string = '/manufacturer';
-  private serialNumberPath: string = '/serialNumber';
-  private heightDiffToAntennaPath: string = '/heightDiffToAntenna';
+  public dataSamplingInterval: number;
+  public accuracyPercentRelativeHumidity: number;
+  public aspiration: string;
+  public notes: string;
+  public manufacturer: string;
+  public serialNumber: string;
+  public heightDiffToAntenna: number;
 
-  // constructor() {
-  //   this._startDate = '';
-  //   this._endDate = '';
-  //   this._calibrationDate = '';
-  //   this._dataSamplingInterval = 0;
-  //   this._accuracyPercentRelativeHumidity = 0;
-  //   this._aspiration = '';
-  //   this._notes = '';
-  //   this._manufacturer = '';
-  //   this._serialNumber = '';
-  //   this._heightDiffToAntenna = 0;
-  // }
-
-  constructor(private existing: HumiditySensorViewModel) {
-    this._startDate = existing && existing._startDate || '';
-    this._endDate = existing && existing._endDate || '';
-    this._calibrationDate = existing && existing._calibrationDate || '';
-    this._dataSamplingInterval = existing && existing._dataSamplingInterval || 0;
-    this._accuracyPercentRelativeHumidity = existing && existing._accuracyPercentRelativeHumidity || 0;
-    this._aspiration = existing && existing._aspiration || '';
-    this._notes = existing && existing._notes || '';
-    this._manufacturer = existing && existing._manufacturer || '';
-    this._serialNumber = existing && existing._serialNumber || '';
-    this._heightDiffToAntenna = existing && existing._heightDiffToAntenna || 0;
+  constructor(private existing?: HumiditySensorViewModel) {
+    this.startDate = existing && existing.startDate || '';
+    this.endDate = existing && existing.endDate || '';
+    this.calibrationDate = existing && existing.calibrationDate || '';
+    this.dataSamplingInterval = existing && existing.dataSamplingInterval || 0;
+    this.accuracyPercentRelativeHumidity = existing && existing.accuracyPercentRelativeHumidity || 0;
+    this.aspiration = existing && existing.aspiration || '';
+    this.notes = existing && existing.notes || '';
+    this.manufacturer = existing && existing.manufacturer || '';
+    this.serialNumber = existing && existing.serialNumber || '';
+    this.heightDiffToAntenna = existing && existing.heightDiffToAntenna || 0;
   }
 
-  set startDate(val: string) {
-    if (val) {
-      this._startDate = val;
-    }
+  /**
+   * Create this class from a JSON (from GeodesyML) object.
+   *
+   * @param humiditySensorPropertyDataModel with source data
+   * @return this
+   */
+  createFromDataModel(humiditySensorDataModel: any) {
+    this.startDate = JPS.getString(humiditySensorDataModel, beginPosPath);
+    this.endDate = JPS.getString(humiditySensorDataModel, endPosPath);
+
+    this.calibrationDate = JPS.getString(humiditySensorDataModel, calibrationDatePath);
+
+    this.dataSamplingInterval = JPS.get(humiditySensorDataModel, dataSamplingIntervalPath);
+    this.accuracyPercentRelativeHumidity = JPS.get(humiditySensorDataModel, accuracyPercentRHPath);
+    this.aspiration = JPS.getString(humiditySensorDataModel, aspirationPath);
+    this.notes = JPS.getString(humiditySensorDataModel, notesPath);
+    this.manufacturer = JPS.getString(humiditySensorDataModel, manufacturerPath);
+    this.serialNumber = JPS.getString(humiditySensorDataModel, serialNumberPath);
+    this.heightDiffToAntenna = JPS.get(humiditySensorDataModel, heightDiffToAntennaPath);
   }
 
-  get startDate(): string {
-    return this._startDate;
-  }
-
-  set endDate(val: string) {
-    if (val) {
-      this._endDate = val;
-    }
-  }
-
-  get endDate(): string {
-    return this._endDate;
-  }
-
-  set calibrationDate(val: string) {
-    if (val) {
-      this._calibrationDate = val;
-    }
-  }
-
-  get calibrationDate(): string {
-    return this._calibrationDate;
-  }
-
-  set dataSamplingInterval(val: number) {
-    if (val) {
-      this._dataSamplingInterval = val;
-    }
-  }
-
-  get dataSamplingInterval(): number {
-    return this._dataSamplingInterval;
-  }
-
-  set accuracyPercentRelativeHumidity(val: number) {
-    if (val) {
-      this._accuracyPercentRelativeHumidity = val;
-    }
-  }
-
-  get accuracyPercentRelativeHumidity(): number {
-    return this._accuracyPercentRelativeHumidity;
-  }
-
-  set aspiration(val: string) {
-    if (val) {
-      this._aspiration = val;
-    }
-  }
-
-  get aspiration(): string {
-    return this._aspiration;
-  }
-
-  set notes(val: string) {
-    if (val) {
-      this._notes = val;
-    }
-  }
-
-  get notes(): string {
-    return this._notes;
-  }
-
-  set manufacturer(val: string) {
-    if (val) {
-      this._manufacturer = val;
-    }
-  }
-
-  get manufacturer(): string {
-    return this._manufacturer;
-  }
-
-  set serialNumber(val: string) {
-    if (val) {
-      this._serialNumber = val;
-    }
-  }
-
-  get serialNumber(): string {
-    return this._serialNumber;
-  }
-
-  set heightDiffToAntenna(val: number) {
-    if (val) {
-      this._heightDiffToAntenna = val;
-    }
-  }
-
-  get heightDiffToAntenna(): number {
-    return this._heightDiffToAntenna;
-  }
-
-  setFromExisting(val: HumiditySensorViewModel) {
-    this._startDate = val._startDate;
-    this._endDate = val._endDate;
-
-    this._calibrationDate = val._calibrationDate;
-
-    this._dataSamplingInterval = val._dataSamplingInterval;
-    this._accuracyPercentRelativeHumidity = val._accuracyPercentRelativeHumidity;
-    this._aspiration = val._aspiration;
-    this._notes = val._notes;
-    this._manufacturer = val._manufacturer;
-    this._serialNumber = val._serialNumber;
-    this._heightDiffToAntenna = val._heightDiffToAntenna;
-  }
-
-  setFromDataModel(humiditySensorDataModel: any) {
-    this._startDate = JsonPointerService.getString(humiditySensorDataModel, this.beginPosPath);
-    this._endDate = JsonPointerService.getString(humiditySensorDataModel, this.endPosPath);
-
-    this._calibrationDate = JsonPointerService.getString(humiditySensorDataModel, this.calibrationDatePath);
-
-    this._dataSamplingInterval = JsonPointerService.get(humiditySensorDataModel, this.dataSamplingIntervalPath);
-    this._accuracyPercentRelativeHumidity = JsonPointerService.get(humiditySensorDataModel, this.accuracyPercentRHPath);
-    this._aspiration = JsonPointerService.getString(humiditySensorDataModel, this.aspirationPath);
-    this._notes = JsonPointerService.getString(humiditySensorDataModel, this.notesPath);
-    this._manufacturer = JsonPointerService.getString(humiditySensorDataModel, this.manufacturerPath);
-    this._serialNumber = JsonPointerService.getString(humiditySensorDataModel, this.serialNumberPath);
-    this._heightDiffToAntenna = JsonPointerService.get(humiditySensorDataModel, this.heightDiffToAntennaPath);
-  }
-
-  toJSON(): any {
-
-  }
-
+  /**
+   * Extract the data here as a source JSON (from GeodesyML) object
+   * @param humiditySensorPropertyDataModels to populate
+   * @return humiditySensorPropertyDataModels given as a param (populated)
+   */
   setDataModel(humiditySensorDataModel: any) {
-    JsonPointerService.set(humiditySensorDataModel, this.beginPosPath, this._startDate);
-    JsonPointerService.set(humiditySensorDataModel, this.endPosPath, this._endDate);
+    JPS.set(humiditySensorDataModel, beginPosPath, this.startDate);
+    JPS.set(humiditySensorDataModel, endPosPath, this.endDate);
 
-    JsonPointerService.set(humiditySensorDataModel, this.calibrationDatePath, this._calibrationDate);
+    JPS.set(humiditySensorDataModel, calibrationDatePath, this.calibrationDate);
 
-    JsonPointerService.set(humiditySensorDataModel, this.dataSamplingIntervalPath,
-      this._dataSamplingInterval.toString());
-    JsonPointerService.set(humiditySensorDataModel, this.accuracyPercentRHPath,
-      this._accuracyPercentRelativeHumidity.toString());
-    JsonPointerService.set(humiditySensorDataModel, this.aspirationPath, this._aspiration);
-    JsonPointerService.set(humiditySensorDataModel, this.notesPath, this._notes);
-    JsonPointerService.set(humiditySensorDataModel, this.manufacturerPath, this._manufacturer);
-    JsonPointerService.set(humiditySensorDataModel, this.serialNumberPath, this._serialNumber);
-    JsonPointerService.set(humiditySensorDataModel, this.heightDiffToAntennaPath, this._heightDiffToAntenna.toString());
+    JPS.set(humiditySensorDataModel, dataSamplingIntervalPath, this.dataSamplingInterval.toString());
+    JPS.set(humiditySensorDataModel, accuracyPercentRHPath, this.accuracyPercentRelativeHumidity.toString());
+    JPS.set(humiditySensorDataModel, aspirationPath, this.aspiration);
+    JPS.set(humiditySensorDataModel, notesPath, this.notes);
+    JPS.set(humiditySensorDataModel, manufacturerPath, this.manufacturer);
+    JPS.set(humiditySensorDataModel, serialNumberPath, this.serialNumber);
+    JPS.set(humiditySensorDataModel, heightDiffToAntennaPath, this.heightDiffToAntenna.toString());
   }
 }
-
-
-// (c.TYPE_NAME) || (c.TYPE_NAME = 'GEODESYML_0.3.HumiditySensorPropertyType');
-// (c._dateDeleted) || (c._dateDeleted = {});
-// (c._dateDeleted.TYPE_NAME) || (c._dateDeleted.TYPE_NAME = 'GML_3_2_1.TimePositionType');
-// (c._dateDeleted.value) || (c._dateDeleted.value = []);
-// (c._dateInserted) || (c._dateInserted = {});
-// (c._dateInserted.TYPE_NAME) || (c._dateInserted.TYPE_NAME = 'GML_3_2_1.TimePositionType');
-// (c._dateInserted.value) || (c._dateInserted.value = []);
-// (c._deletedReason) || (c._deletedReason = '');
-// (c._humiditySensor) || (c._humiditySensor = {});
-
-
-//   validTime = {});
-// validTime.abstractTimePrimitive) || validTime.abstractTimePrimitive = {});
-// validTime.abstractTimePrimitive['gml:TimePeriod'])
-// || validTime.abstractTimePrimitive['gml:TimePeriod'] = {});
-//
-// validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition)
-// || validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition = {});
-// validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value)
-// || validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value = []);
-//
-// validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition)
-// || validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition = {});
-// validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value) ||
-// validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value = []);
-//
-//
-// // Defined in equipment.xsd - hsType
-// dataSamplingInterval) || dataSamplingInterval = 0);
-// accuracyPercentRelativeHumidity) || accuracyPercentRelativeHumidity = 0);
-// aspiration) || aspiration = '');
-// notes) || notes = '');
-// // Defined in equipment.xsd - baseSensorEquipmentType
-// manufacturer) || manufacturer = '');
-// serialNumber) || serialNumber = '');
-// heightDiffToAntenna) || heightDiffToAntenna = 0);
-// calibrationDate) || calibrationDate = {});
-// calibrationDate.value) || calibrationDate.value = ['']);

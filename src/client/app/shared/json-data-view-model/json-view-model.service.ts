@@ -87,7 +87,7 @@ export class JsonViewModelService {
       // siteLogViewModel.surveyedLocalTies = SurveyedLocalTies.translateDataToView(siteLogDataModel);
       // siteLogViewModel.frequencyStandards = FrequencyStandards.translateDataToView(siteLogDataModel);
       let humiditySensorsViewModel: HumiditySensorsViewModel = new HumiditySensorsViewModel();
-      humiditySensorsViewModel.setFromDataModel(siteLogDataModel.humiditySensors);
+      humiditySensorsViewModel.createFromDataModel(siteLogDataModel.humiditySensors);
       // siteLogViewModel.humiditySensors =
       //   console.debug('translateToView subscribe fn - siteIdentification: ', siteLogViewModel.siteIdentification);
       // siteLogViewModel.pressureSensors = PressureSensors.translateDataToView(siteLogDataModel);

@@ -1,5 +1,8 @@
 import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 
+/**
+ * OBSELETE NOW - WILL REMOVE SOON
+ */
 export class SiteIdentification {
 
   /**

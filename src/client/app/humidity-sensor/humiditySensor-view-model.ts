@@ -5,7 +5,7 @@ import {JsonPointerService as JPS} from '../shared/json-pointer/json-pointer.ser
  */
 export class HumiditySensorsViewModel {
   /**
-   * Not the best form making private fields public, though saves clutter of creating accessors / getters for all
+   * Not the best form making private fields public, though this saves the clutter of creating accessors/getters for all
    */
   public humiditySensors: HumiditySensorPropertyViewModel[];
 

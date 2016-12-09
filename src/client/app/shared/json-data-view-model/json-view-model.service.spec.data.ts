@@ -2,25 +2,25 @@ import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 export class JsonViewModelServiceSpecData {
   public static data(): SiteLogDataModel {
     return <SiteLogDataModel>{
-      // 'geo:siteLog': {
-      //   TYPE_NAME: 'GEODESYML_0_3.SiteLogType',
-      //   description: {
-      //     TYPE_NAME: 'GML_3_2_1.StringOrRefType',
-      //     value: ''
-      //   },
-      //   descriptionReference: {
-      //     TYPE_NAME: 'GML_3_2_1.ReferenceType'
-      //   },
-      //   identifier: {
-      //     TYPE_NAME: 'GML_3_2_1.CodeWithAuthorityType',
-      //     value: ''
-      //   },
-      //   boundedBy: {
-      //     TYPE_NAME: 'GML_3_2_1.BoundingShapeType'
-      //   },
-      //   atSite: {
-      //     TYPE_NAME: 'GEODESYML_0_3.SitePropertyType'
-      //   },
+      'geo:siteLog': {
+        TYPE_NAME: 'GEODESYML_0_3.SiteLogType',
+        description: {
+          TYPE_NAME: 'GML_3_2_1.StringOrRefType',
+          value: ''
+        },
+        descriptionReference: {
+          TYPE_NAME: 'GML_3_2_1.ReferenceType'
+        },
+        identifier: {
+          TYPE_NAME: 'GML_3_2_1.CodeWithAuthorityType',
+          value: ''
+        },
+        boundedBy: {
+          TYPE_NAME: 'GML_3_2_1.BoundingShapeType'
+        },
+        atSite: {
+          TYPE_NAME: 'GEODESYML_0_3.SitePropertyType'
+        },
         formInformation: {
           TYPE_NAME: 'GEODESYML_0_3.FormInformationType',
           preparedBy: 'James C Berra',
@@ -1510,7 +1510,7 @@ export class JsonViewModelServiceSpecData {
         dataStreamsSet: {
           TYPE_NAME: 'GEODESYML_0_3.DataStreamsPropertyType'
         }
-      };
+      }
     };
-  // }
+  }
 }

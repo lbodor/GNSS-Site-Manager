@@ -1,4 +1,4 @@
-import {SiteLogModel} from './SiteLogDataModel';
+import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 
 export class SiteLocation {
 
@@ -7,8 +7,8 @@ export class SiteLocation {
    *
    * @param siteLogDataModel
    */
-  public static translateDataToView(siteLogDataModel: SiteLogModel): any {
-    let siteLocation: any = siteLogDataModel.siteLocation;
+  public static translateDataToView(siteLogDataModel: SiteLogDataModel): any {
+    let siteLocation: any = siteLogDataModel['geo:siteLog'].siteLocation;
     console.debug('translateDataToView - SiteLocation: ', siteLocation);
 
     let translatedDataToView: any = {};

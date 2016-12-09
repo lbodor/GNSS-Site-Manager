@@ -3,13 +3,14 @@
 // import 'rxjs/add/operator/catch';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
-import {SiteLogModel} from './SiteLogDataModel';
+import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 import {HttpUtilsService} from '../global/http-utils.service';
 import {Subscriber} from 'rxjs';
 import {HumiditySensorsViewModel} from '../../humidity-sensor/humiditySensor-view-model';
+import {SiteLogViewModel} from './view-model/SiteLogViewModel';
 // import {SiteIdentification} from './SiteIdentification';
 // import {SiteLocation} from './SiteLocation';
-// import {SiteLogModel} from './SiteLogModel';
+// import {SiteLogViewModel} from './SiteLogViewModel';
 
 /**
  * This class provides the service to convert from 'Geodesy data model JSON' (from the XML via Jsonix) to
@@ -24,11 +25,11 @@ export class JsonViewModelService {
    * @param dataViewJson from the GeodesyML - complete SiteLog instance.
    * @return Observable containing a response with translated modelViewJson
    */
-  public dataViewToModelViewJson(dataViewJson: any): Observable<SiteLogModel> {
+  public dataViewToModelViewJson(dataViewJson: any): Observable<SiteLogViewModel> {
     console.debug('dataViewToModelViewJson - dataViewJson: ', dataViewJson);
 
-    return new Observable<SiteLogModel>((observer: Subscriber<SiteLogModel>) => {
-      let siteLogDataModel: SiteLogModel = this.breakIntoParts(dataViewJson);
+    return new Observable<SiteLogViewModel>((observer: Subscriber<SiteLogViewModel>) => {
+      let siteLogDataModel: SiteLogDataModel = this.breakIntoParts(dataViewJson);
       console.debug('siteLogDataModel: ', siteLogDataModel);
       this.translateToView(siteLogDataModel).subscribe(
         (item: any) => {
@@ -50,32 +51,34 @@ export class JsonViewModelService {
    * @param dataViewJson
    * @return each part broken out of the SiteLog (data model)
    */
-  breakIntoParts(dataViewJson: any): SiteLogModel {
-    let siteLogDataModel: SiteLogModel = <SiteLogModel>{};
-    let siteLog: any = dataViewJson['geo:siteLog'];
-    siteLogDataModel.siteIdentification = siteLog.siteIdentification;
-    siteLogDataModel.siteLocation = siteLog.siteLocation;
-    siteLogDataModel.gnssReceivers = siteLog.gnssReceivers;
-    siteLogDataModel.gnssAntennas = siteLog.gnssAntennas;
-    siteLogDataModel.surveyedLocalTies = siteLog.surveyedLocalTies;
-    siteLogDataModel.frequencyStandards = siteLog.frequencyStandards;
-    siteLogDataModel.humiditySensors = siteLog.humiditySensors;
-    siteLogDataModel.pressureSensors = siteLog.pressureSensors;
-    siteLogDataModel.temperatureSensors = siteLog.temperatureSensors;
-    siteLogDataModel.waterVaporSensors = siteLog.waterVaporSensors;
-    siteLogDataModel.siteOwner = siteLog.siteOwner;
-    siteLogDataModel.siteContact = siteLog.siteContact;
-    siteLogDataModel.siteMetadataCustodian = siteLog.siteMetadataCustodian;
-    siteLogDataModel.siteDataSource = siteLog.siteDataSource;
-    siteLogDataModel.moreInformation = siteLog.moreInformation;
-    siteLogDataModel.dataStreamsSet = siteLog.dataStreamsSet;
-    return siteLogDataModel;
+  breakIntoParts(dataViewJson: any): SiteLogDataModel {
+    let siteLogInput: any = dataViewJson['geo:siteLog'];
+    let siteLogOutput: SiteLogDataModel = <SiteLogDataModel>{};
+    siteLogOutput['geo:siteLog'] = <any>{};
+    siteLogOutput['geo:siteLog'].siteIdentification = siteLogInput.siteIdentification;
+    siteLogOutput['geo:siteLog'].siteLocation = siteLogInput.siteLocation;
+    siteLogOutput['geo:siteLog'].gnssReceivers = siteLogInput.gnssReceivers;
+    siteLogOutput['geo:siteLog'].gnssAntennas = siteLogInput.gnssAntennas;
+    siteLogOutput['geo:siteLog'].surveyedLocalTies = siteLogInput.surveyedLocalTies;
+    siteLogOutput['geo:siteLog'].frequencyStandards = siteLogInput.frequencyStandards;
+    siteLogOutput['geo:siteLog'].humiditySensors = siteLogInput.humiditySensors;
+    siteLogOutput['geo:siteLog'].pressureSensors = siteLogInput.pressureSensors;
+    siteLogOutput['geo:siteLog'].temperatureSensors = siteLogInput.temperatureSensors;
+    siteLogOutput['geo:siteLog'].waterVaporSensors = siteLogInput.waterVaporSensors;
+    siteLogOutput['geo:siteLog'].siteOwner = siteLogInput.siteOwner;
+    siteLogOutput['geo:siteLog'].siteContact = siteLogInput.siteContact;
+    siteLogOutput['geo:siteLog'].siteMetadataCustodian = siteLogInput.siteMetadataCustodian;
+    siteLogOutput['geo:siteLog'].siteDataSource = siteLogInput.siteDataSource;
+    siteLogOutput['geo:siteLog'].moreInformation = siteLogInput.moreInformation;
+    siteLogOutput['geo:siteLog'].dataStreamsSet = siteLogInput.dataStreamsSet;
+    return siteLogOutput;
   }
 
-  translateToView(siteLogDataModel: SiteLogModel): Observable<SiteLogModel> {
+  translateToView(siteLogDataModel: SiteLogDataModel): Observable<SiteLogViewModel> {
 
-    return new Observable<SiteLogModel>((observer: Subscriber<SiteLogModel>) => {
-      let siteLogViewModel: SiteLogModel = <SiteLogModel>{};
+    return new Observable<SiteLogViewModel>((observer: Subscriber<SiteLogViewModel>) => {
+      let siteLogViewModel: SiteLogViewModel = <SiteLogViewModel>{};
+      siteLogViewModel.siteLog = <any>{};
       console.debug('siteLogViewModel (have to do something with this):', siteLogViewModel);
 
       // siteLogViewModel.siteIdentification = SiteIdentification.translateDataToView(siteLogDataModel);
@@ -87,8 +90,8 @@ export class JsonViewModelService {
       // siteLogViewModel.surveyedLocalTies = SurveyedLocalTies.translateDataToView(siteLogDataModel);
       // siteLogViewModel.frequencyStandards = FrequencyStandards.translateDataToView(siteLogDataModel);
       let humiditySensorsViewModel: HumiditySensorsViewModel = new HumiditySensorsViewModel();
-      humiditySensorsViewModel.createFromDataModel(siteLogDataModel.humiditySensors);
-      // siteLogViewModel.humiditySensors =
+      humiditySensorsViewModel.createFromDataModel(siteLogDataModel['geo:siteLog'].humiditySensors);
+      siteLogViewModel.siteLog.humiditySensors = humiditySensorsViewModel.humiditySensors;
       //   console.debug('translateToView subscribe fn - siteIdentification: ', siteLogViewModel.siteIdentification);
       // siteLogViewModel.pressureSensors = PressureSensors.translateDataToView(siteLogDataModel);
       // siteLogViewModel.temperatureSensors = TemperatureSensors.translateDataToView(siteLogDataModel);

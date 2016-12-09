@@ -7,7 +7,7 @@ export function main() {
   fdescribe('HumiditySensorsViewModel', () => {
 
     beforeEach(() => {
-      humiditySensorsDataView = JsonViewModelServiceSpecData.data().humiditySensors;
+      humiditySensorsDataView = JsonViewModelServiceSpecData.data()['geo:siteLog'].humiditySensors;
       humiditySensorsViewModel = new HumiditySensorsViewModel();
     });
 
@@ -55,6 +55,42 @@ export function main() {
       expect(firstHSD.accuracyPercentRelativeHumidity).toEqual(firstHSV.accuracyPercentRelativeHumidity.toString());
       expect(firstHSD.aspiration).toEqual(firstHSV.aspiration);
       expect(firstHSD.dataSamplingInterval).toEqual(firstHSV.dataSamplingInterval.toString());
+      expect(firstHSD.heightDiffToAntenna).toEqual(firstHSV.heightDiffToAntenna.toString());
+      expect(firstHSD.manufacturer).toEqual(firstHSV.manufacturer);
+      expect(firstHSD.notes).toEqual(firstHSV.notes);
+      expect(firstHSD.serialNumber).toEqual(firstHSV.serialNumber);
+
+      expect(firstHSD.calibrationDate.value[0]).toEqual(firstHSV.calibrationDate);
+      expect(firstHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0]).toEqual(firstHSV.startDate);
+      expect(firstHSV.endDate).toEqual('');
+      expect(firstHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value[0]).toEqual('');
+    });
+
+    it('test view to data using original data model', () => {
+      let newHeightDiffToAntennaValue: number = 66;
+      humiditySensorsViewModel.createFromDataModel(humiditySensorsDataView);
+
+      expect(humiditySensorsViewModel).toBeDefined();
+
+      // let humiditySensorsDataView2: any;
+
+      // Change value in View
+      humiditySensorsViewModel.humiditySensors[0].humiditySensor.heightDiffToAntenna = newHeightDiffToAntennaValue;
+
+      humiditySensorsViewModel.setDataModel(humiditySensorsDataView); // object exists so will be populated
+
+      expect(humiditySensorsDataView).toBeDefined();
+
+      let out: any = JSON.stringify(humiditySensorsDataView);
+      console.log('view back to data: ', out);
+
+      let firstHSV: HumiditySensorViewModel = humiditySensorsViewModel.humiditySensors[0].humiditySensor;
+      let firstHSD: any = humiditySensorsDataView[0].humiditySensor;
+
+      expect(firstHSD.accuracyPercentRelativeHumidity).toEqual(firstHSV.accuracyPercentRelativeHumidity.toString());
+      expect(firstHSD.aspiration).toEqual(firstHSV.aspiration);
+      expect(firstHSD.dataSamplingInterval).toEqual(firstHSV.dataSamplingInterval.toString());
+      expect(firstHSV.heightDiffToAntenna).toEqual(newHeightDiffToAntennaValue);
       expect(firstHSD.heightDiffToAntenna).toEqual(firstHSV.heightDiffToAntenna.toString());
       expect(firstHSD.manufacturer).toEqual(firstHSV.manufacturer);
       expect(firstHSD.notes).toEqual(firstHSV.notes);

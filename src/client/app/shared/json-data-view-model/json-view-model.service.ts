@@ -1,6 +1,3 @@
-// import {Response} from '@angular/http';
-// import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/catch';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import {SiteLogDataModel} from './data-model/SiteLogDataModel';
@@ -8,9 +5,6 @@ import {HttpUtilsService} from '../global/http-utils.service';
 import {Subscriber} from 'rxjs';
 import {HumiditySensorsViewModel} from '../../humidity-sensor/humiditySensor-view-model';
 import {SiteLogViewModel} from './view-model/SiteLogViewModel';
-// import {SiteIdentification} from './SiteIdentification';
-// import {SiteLocation} from './SiteLocation';
-// import {SiteLogViewModel} from './SiteLogViewModel';
 
 /**
  * This class provides the service to convert from 'Geodesy data model JSON' (from the XML via Jsonix) to

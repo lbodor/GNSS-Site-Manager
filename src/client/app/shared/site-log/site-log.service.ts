@@ -8,6 +8,7 @@ import {WFSService, SelectSiteSearchType} from '../wfs/wfs.service';
 import {HttpUtilsService} from '../global/http-utils.service';
 import {ConstantsService} from '../global/constants.service';
 import {JsonViewModelService} from '../json-data-view-model/json-view-model.service';
+import {SiteLogViewModel} from '../json-data-view-model/view-model/SiteLogViewModel';
 
 /**
  * This class provides the service with methods to retrieve CORS Setup info from DB.
@@ -63,13 +64,8 @@ export class SiteLogService {
       try {
         this.doGetSiteLogByFourCharacterIdUsingGeodesyML(fourCharacterId).subscribe(
           (responseJson: any) => {
-            this.jsonViewModelService.dataViewToModelViewJson(responseJson).subscribe(
-              (responseJson: any) => {
-                observer.next(responseJson);
-                observer.complete();
-              },
-              (error: Error) => HttpUtilsService.handleError
-            );
+            let siteLogViewModel: SiteLogViewModel = this.jsonViewModelService.dataModelToViewModelJson(responseJson);
+            observer.next(siteLogViewModel);
           },
           (error: Error) => HttpUtilsService.handleError
         );
@@ -96,17 +92,6 @@ export class SiteLogService {
       })
       .catch(HttpUtilsService.handleError);
   }
-
-  // private httpGetSiteLogByFourCharacterId(fourCharacterId: string, formatIsGeodesyML: boolean): Observable<any> {
-  //   console.log('gethttpGetSiteLogByFourCharacterId(fourCharacterId: '+fourCharacterId+', formatIsGeodesyML: '+formatIsGeodesyML+')');
-  //   let format: string = 'format=' + formatIsGeodesyML? 'geodesyml': 'json';
-  //   return this.http.get(this.constantsService.getWebServiceURL()
-  //     + '/siteLogs/search/findByFourCharacterId?id=' + fourCharacterId + '&format='+format)
-  //     .map((response: Response) => {
-  //       return this.handleXMLData(response);
-  //     })
-  //     .catch(HttpUtilsService.handleError);
-  // }
 
   getSiteLogByFourCharacterIdUsingGeodesyMLWFS(fourCharacterId: string): Observable<any> {
     // console.log('getSiteLogByFourCharacterIdGeodesyMLWFS(fourCharacterId: ', fourCharacterId);

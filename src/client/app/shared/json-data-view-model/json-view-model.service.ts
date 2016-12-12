@@ -23,7 +23,8 @@ export class JsonViewModelService {
     console.debug('dataViewToModelViewJson - dataViewJson: ', dataViewJson);
 
     return new Observable<SiteLogViewModel>((observer: Subscriber<SiteLogViewModel>) => {
-      let siteLogDataModel: SiteLogDataModel = this.breakIntoParts(dataViewJson);
+      // Casting to model - possible error that a field won't exist and will need to make optional (with ?)
+      let siteLogDataModel: SiteLogDataModel = <SiteLogDataModel> dataViewJson;
       console.debug('siteLogDataModel: ', siteLogDataModel);
       this.translateToView(siteLogDataModel).subscribe(
         (item: any) => {
@@ -36,36 +37,6 @@ export class JsonViewModelService {
           observer.complete();
         });
     });
-  }
-
-  /**
-   * Given Geodesy data model JSON, break into constituent parts such as Antennas, Recievers, ... to
-   * be translated individually.
-   *
-   * @param dataViewJson
-   * @return each part broken out of the SiteLog (data model)
-   */
-  breakIntoParts(dataViewJson: any): SiteLogDataModel {
-    let siteLogInput: any = dataViewJson['geo:siteLog'];
-    let siteLogOutput: SiteLogDataModel = <SiteLogDataModel>{};
-    siteLogOutput['geo:siteLog'] = <any>{};
-    siteLogOutput['geo:siteLog'].siteIdentification = siteLogInput.siteIdentification;
-    siteLogOutput['geo:siteLog'].siteLocation = siteLogInput.siteLocation;
-    siteLogOutput['geo:siteLog'].gnssReceivers = siteLogInput.gnssReceivers;
-    siteLogOutput['geo:siteLog'].gnssAntennas = siteLogInput.gnssAntennas;
-    siteLogOutput['geo:siteLog'].surveyedLocalTies = siteLogInput.surveyedLocalTies;
-    siteLogOutput['geo:siteLog'].frequencyStandards = siteLogInput.frequencyStandards;
-    siteLogOutput['geo:siteLog'].humiditySensors = siteLogInput.humiditySensors;
-    siteLogOutput['geo:siteLog'].pressureSensors = siteLogInput.pressureSensors;
-    siteLogOutput['geo:siteLog'].temperatureSensors = siteLogInput.temperatureSensors;
-    siteLogOutput['geo:siteLog'].waterVaporSensors = siteLogInput.waterVaporSensors;
-    siteLogOutput['geo:siteLog'].siteOwner = siteLogInput.siteOwner;
-    siteLogOutput['geo:siteLog'].siteContact = siteLogInput.siteContact;
-    siteLogOutput['geo:siteLog'].siteMetadataCustodian = siteLogInput.siteMetadataCustodian;
-    siteLogOutput['geo:siteLog'].siteDataSource = siteLogInput.siteDataSource;
-    siteLogOutput['geo:siteLog'].moreInformation = siteLogInput.moreInformation;
-    siteLogOutput['geo:siteLog'].dataStreamsSet = siteLogInput.dataStreamsSet;
-    return siteLogOutput;
   }
 
   translateToView(siteLogDataModel: SiteLogDataModel): Observable<SiteLogViewModel> {

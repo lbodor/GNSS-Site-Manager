@@ -11,7 +11,7 @@ export function main() {
   let completeValidSitelog: SiteLogDataModel = JsonViewModelServiceSpecData.data();
   let fieldMappings: FieldMaps = new HumiditySensorViewModel().fieldMapping();
 
-  fdescribe('Json view translator service', () => {
+  describe('Json view translator service', () => {
 
     beforeEach(() => {
 

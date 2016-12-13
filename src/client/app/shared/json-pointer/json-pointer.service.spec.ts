@@ -2,7 +2,7 @@ import {JsonPointerService} from './json-pointer.service';
 
 
 export function main() {
-  fdescribe('Testing of JsonPointerService', () => {
+  describe('Testing of JsonPointerService', () => {
     let jsonObj: any;
 
     beforeEach(() => {

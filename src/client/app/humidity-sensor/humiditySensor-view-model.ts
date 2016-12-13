@@ -1,159 +1,67 @@
-import {JsonPointerService as JPS} from '../shared/json-pointer/json-pointer.service';
-import {FieldMapper} from '../shared/json-data-view-model/FieldMapper';
-import {FieldMaps, FieldMap} from '../shared/json-data-view-model/FieldMap';
-import {DataTypedPointer} from '../shared/json-data-view-model/DataTypedPointer';
-import {TypedPointer} from '../shared/json-data-view-model/TypedPointer';
-import {ViewTypedPointer} from '../shared/json-data-view-model/ViewTypedPointer';
+import {DataViewTranslatorService} from '../shared/json-data-view-model/data-view-translator.service';
+import {AbstractViewModel} from '../shared/json-data-view-model/view-model/AbstractViewModel';
 
 /**
- * View Model class and methods to translate to/from the Data Model (from JSON from the GeodesyML)
+ * Class to assist with creating and managing the ViewModel instances
  */
-// TODO remove
-export class HumiditySensorsViewModel {
-  /**
-   * Not the best form making private fields public, though this saves the clutter of creating accessors/getters for all
-   */
-  public humiditySensors: HumiditySensorPropertyViewModel[];
-
-  constructor(humiditySensorPropertyViewModels?: HumiditySensorPropertyViewModel[]) {
-    this._humiditySensors = humiditySensorPropertyViewModels;
-  }
-
-  set _humiditySensors(existing: HumiditySensorPropertyViewModel[]) {
-    if (existing) {
-      this.humiditySensors = existing;
-    } else {
-      this.humiditySensors = [];
-    }
-  }
+export class HumiditySensors {
 
   /**
-   * Create this class and descendants from a JSON (from GeodesyML) object.
+   * Create the ViewModels array by translating from the JSON data model (from GeodesyML) object.
    *
-   * @param humiditySensorPropertyDataModels with source data
-   * @return this
+   * @param humiditySensorsDataModels from the JSON data model (from GeodesyML) object
+   * @return HumiditySensorViewModel[]
    */
-  createFromDataModel(humiditySensorPropertyDataModels: any): HumiditySensorsViewModel {
-    for (let humiditySensorsPropertyDataModel of humiditySensorPropertyDataModels)
-      this.humiditySensors.push(
-        new HumiditySensorPropertyViewModel().createFromDataModel(humiditySensorsPropertyDataModel));
-
-    return this;
+  static dataToViewModel(humiditySensorsDataModels: any[]): HumiditySensorViewModel[] {
+    let humiditySensorViewModels: HumiditySensorViewModel[] = [];
+    for (let humiditySensorsDataModel of humiditySensorsDataModels) {
+      let viewModel: HumiditySensorViewModel = new HumiditySensorViewModel();
+      let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(viewModel.fieldMapping());
+      dataViewTranslatorService.translateD2V(humiditySensorsDataModel.humiditySensor, viewModel);
+      humiditySensorViewModels.push(viewModel);
+    }
+    return humiditySensorViewModels;
   }
 
-  /**
-   * Extract the data here as a source JSON (from GeodesyML) object
-   * @param humiditySensorPropertyDataModels to populate
-   * @return humiditySensorPropertyDataModels given as a param (populated).  Be aware that even though the param is
-   * populated, if upon entry it is undefined then the param will remain undefined in the caller.
-   */
-  setDataModel(humiditySensorPropertyDataModels: any): any {
-    if (humiditySensorPropertyDataModels) {
-      humiditySensorPropertyDataModels.length = 0;
-    } else {
-      humiditySensorPropertyDataModels = [];
+  static viewToDataModel(humiditySensorsViewModels: HumiditySensorViewModel[]): any[] {
+    let humiditySensorDataModels: any[] = [];
+    let viewModel: HumiditySensorViewModel = new HumiditySensorViewModel();
+    for (let humiditySensorsViewModel of humiditySensorsViewModels) {
+      let dataModel: any = {};
+      let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(viewModel.fieldMapping());
+      dataViewTranslatorService.translateV2D(humiditySensorsViewModel, dataModel);
+      humiditySensorDataModels.push(new HumiditySensorPropertyType(dataModel));
     }
-    for (let humiditySensorPropertyViewModel of this.humiditySensors) {
-      let humiditySensorPropertyDataModel: any = {};
-      humiditySensorPropertyViewModel.setDataModel(humiditySensorPropertyDataModel);
-      humiditySensorPropertyDataModels.push(humiditySensorPropertyDataModel);
-    }
-
-    return humiditySensorPropertyDataModels;
+    return humiditySensorDataModels;
   }
 }
 
-let dateDeletedPath: string = '/dateDeleted/value/0';
-let dateInsertedPath: string = '/dateInserted/value/0';
-let deletedReasonPath: string = '/deletedReason';
-let humiditySensorPath: string = '/humiditySensor';
-// TODO remove this
-export class HumiditySensorPropertyViewModel {
-  /**
-   * Not the best form making private fields public, though saves clutter of creating accessors / getters for all
-   */
-  public dateDeleted: string;
-  public dateInserted: string;
+class ValueArray {
+  value: string[];
+
+  constructor(item0: string) {
+    this.value = [];
+    this.value.push(item0);
+  }
+}
+
+export class HumiditySensorPropertyType {
+  public dateInserted: ValueArray;
+  public dateDeleted: ValueArray;
   public deletedReason: string;
-  public humiditySensor: HumiditySensorViewModel;
+  public humiditySensor: any;
 
-  constructor(existing?: HumiditySensorPropertyViewModel) {
-    this.dateDeleted = existing && existing.dateDeleted || '';
-    this.dateInserted = existing && existing.dateInserted || '';
-    this.deletedReason = existing && existing.deletedReason || '';
-    this.humiditySensor = existing && existing.humiditySensor || new HumiditySensorViewModel(null);
-  }
-
-  /**
-   * Create this class and descendants from a JSON (from GeodesyML) object.
-   *
-   * @param humiditySensorPropertyDataModel with source data
-   * @return this
-   */
-  createFromDataModel(humiditySensorPropertyDataModel: any): HumiditySensorPropertyViewModel {
-    this.dateDeleted = JPS.getString(humiditySensorPropertyDataModel, dateDeletedPath);
-    this.dateInserted = JPS.getString(humiditySensorPropertyDataModel, dateInsertedPath);
-    this.deletedReason = JPS.getString(humiditySensorPropertyDataModel, deletedReasonPath);
-    this.humiditySensor.createFromDataModel(JPS.get(humiditySensorPropertyDataModel, humiditySensorPath));
-
-    return this;
-  }
-
-  /**
-   * Extract the data here as a source JSON (from GeodesyML) object
-   * @param humiditySensorPropertyDataModels to populate
-   * @return humiditySensorPropertyDataModels given as a param (populated)
-   */
-  setDataModel(humiditySensorPropertyDataModel: any) {
-    JPS.set(humiditySensorPropertyDataModel, dateDeletedPath, this.dateDeleted);
-    JPS.set(humiditySensorPropertyDataModel, dateInsertedPath, this.dateInserted);
-    JPS.set(humiditySensorPropertyDataModel, deletedReasonPath, this.deletedReason);
-    if (!JPS.get(humiditySensorPropertyDataModel, humiditySensorPath)) {
-      humiditySensorPropertyDataModel.humiditySensor = {};
-    }
-    this.humiditySensor.setDataModel(JPS.get(humiditySensorPropertyDataModel, humiditySensorPath));
-
-    return humiditySensorPropertyDataModel;
+  constructor(humiditySensor: any) {
+    this.humiditySensor = humiditySensor;
+    this.dateInserted = new ValueArray('');
+    this.dateDeleted = new ValueArray('');
+    this.deletedReason='';
   }
 }
 
-let fieldMappingFlat: string[] = [
-  '/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0', 'string',
-  '/startDate', 'string',
-
-  '/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0', 'string',
-  '/endDate', 'string',
-
-  '/calibrationDate/value/0', 'string',
-  '/calibrationDate', 'string',
-
-  '/dataSamplingInterval', 'string',
-  '/dataSamplingInterval', 'number',
-
-  '/accuracyPercentRelativeHumidity', 'string',
-  '/accuracyPercentRelativeHumidity', 'number',
-
-  '/aspiration', 'string',
-  '/aspiration', 'string',
-
-  '/notes', 'string',
-  '/notes', 'string',
-
-  '/manufacturer', 'string',
-  '/manufacturer', 'string',
-
-  '/serialNumber', 'string',
-  '/serialNumber', 'string',
-
-  '/heightDiffToAntenna', 'string',
-  '/heightDiffToAntenna', 'number'
-];
-
-export class HumiditySensorViewModel implements FieldMapper {
-
-
+export class HumiditySensorViewModel extends AbstractViewModel {
   /**
-   * Not the best form making private fields public, though saves clutter of creating accessors / getters for all
+   * Not the best form making private fields public, however saves clutter of creating accessors / getters for all
    */
   public startDate: string;
   public endDate: string;
@@ -168,7 +76,12 @@ export class HumiditySensorViewModel implements FieldMapper {
   public serialNumber: string;
   public heightDiffToAntenna: number;
 
+  /**
+   * Constructor - optionally pass in an existing object to clone.  If none then fields are set to defaults.
+   * @param existing
+   */
   constructor(private existing?: HumiditySensorViewModel) {
+    super();
     this.startDate = existing && existing.startDate || '';
     this.endDate = existing && existing.endDate || '';
     this.calibrationDate = existing && existing.calibrationDate || '';
@@ -181,91 +94,38 @@ export class HumiditySensorViewModel implements FieldMapper {
     this.heightDiffToAntenna = existing && existing.heightDiffToAntenna || 0;
   }
 
-  fieldMapping(): FieldMaps {
-    if (fieldMappingFlat.length % 4 !== 0) {
-      throw new Error('fieldMappingFlat isnt divisible by 4');
-    }
-    let fieldMapsArray: FieldMap[] = [];
-    for (let i = 0; i < fieldMappingFlat.length; i += 4) {
-      let dataPath: string = fieldMappingFlat[i];
-      let dataPathType: string = fieldMappingFlat[i + 1];
-      let viewPath: string = fieldMappingFlat[i + 2];
-      let viewPathType: string = fieldMappingFlat[i + 3];
+  getFieldMappings(): string[][] {
+    return [
+      ['/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0', 'string',
+        '/startDate', 'string'],
 
-      this.assertCorrect(dataPath, dataPathType, viewPath, viewPathType);
+      ['/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0', 'string',
+        '/endDate', 'string'],
 
-      let dataTypePointer: TypedPointer = new DataTypedPointer(dataPath, dataPathType);
-      let viewTypePointer: TypedPointer = new ViewTypedPointer(viewPath, viewPathType);
-      fieldMapsArray.push(new FieldMap(dataTypePointer, viewTypePointer));
-    }
-    let fieldMaps = new FieldMaps(fieldMapsArray);
-    return fieldMaps;
-  }
+      ['/calibrationDate/value/0', 'string',
+        '/calibrationDate', 'string'],
 
-  // should be private - soon - tslint error currently
-  assertCorrect(dataPath: string, dataPathType: string, viewPath: string, viewPathType: string) {
-    assert(dataPath.match(/\/.*/));
-    assert(dataPathType.match(/number|string/));
-    assert(viewPath.match(/\/.*/));
-    assert(viewPathType.match(/number|string/));
-  }
+      ['/dataSamplingInterval', 'string',
+        '/dataSamplingInterval', 'number'],
 
-  /**
-   * Create this class from a JSON (from GeodesyML) object.
-   *
-   * @param humiditySensorPropertyDataModel with source data
-   * @return this
-   */
-  createFromDataModel(humiditySensorDataModel: any) {
-    // this.startDate = JPS.getString(humiditySensorDataModel, beginPosPath);
-    // this.endDate = JPS.getString(humiditySensorDataModel, endPosPath);
-    //
-    // this.calibrationDate = JPS.getString(humiditySensorDataModel, calibrationDatePath);
-    //
-    // this.dataSamplingInterval = JPS.get(humiditySensorDataModel, dataSamplingIntervalPath);
-    // this.accuracyPercentRelativeHumidity = JPS.get(humiditySensorDataModel, accuracyPercentRHPath);
-    // this.aspiration = JPS.getString(humiditySensorDataModel, aspirationPath);
-    // this.notes = JPS.getString(humiditySensorDataModel, notesPath);
-    // this.manufacturer = JPS.getString(humiditySensorDataModel, manufacturerPath);
-    // this.serialNumber = JPS.getString(humiditySensorDataModel, serialNumberPath);
-    // this.heightDiffToAntenna = JPS.get(humiditySensorDataModel, heightDiffToAntennaPath);
-  }
+      ['/accuracyPercentRelativeHumidity', 'string',
+        '/accuracyPercentRelativeHumidity', 'number'],
 
-  // ('siteLog/humiditySensors/0/humiditySensorProperty/validTime/abstractTimePrimitive
-  // /gml:TimePeriod/beginPosition/value/0', string),  ('siteLog/startDate', Date))
+      ['/aspiration', 'string',
+        '/aspiration', 'string'],
 
-//   class TypedPointer {
-//   string
-//   pointer;
-//   type
-//   string;
-// }
-//
-// class FieldMap (
-//   froml; Typed
-// )
+      ['/notes', 'string',
+        '/notes', 'string'],
 
-// }
+      ['/manufacturer', 'string',
+        '/manufacturer', 'string'],
 
-  /**
-   * Extract the data here as a source JSON (from GeodesyML) object
-   * @param humiditySensorPropertyDataModels to populate
-   * @return humiditySensorPropertyDataModels given as a param (populated)
-   */
-  setDataModel(humiditySensorDataModel: any) {
-    // JPS.set(humiditySensorDataModel, beginPosPath, this.startDate);
-    // JPS.set(humiditySensorDataModel, endPosPath, this.endDate);
-    //
-    // JPS.set(humiditySensorDataModel, calibrationDatePath, this.calibrationDate);
-    //
-    // JPS.set(humiditySensorDataModel, dataSamplingIntervalPath, this.dataSamplingInterval.toString());
-    // JPS.set(humiditySensorDataModel, accuracyPercentRHPath, this.accuracyPercentRelativeHumidity.toString());
-    // JPS.set(humiditySensorDataModel, aspirationPath, this.aspiration);
-    // JPS.set(humiditySensorDataModel, notesPath, this.notes);
-    // JPS.set(humiditySensorDataModel, manufacturerPath, this.manufacturer);
-    // JPS.set(humiditySensorDataModel, serialNumberPath, this.serialNumber);
-    // JPS.set(humiditySensorDataModel, heightDiffToAntennaPath, this.heightDiffToAntenna.toString());
-  }
+      ['/serialNumber', 'string',
+        '/serialNumber', 'string'],
 
+      ['/heightDiffToAntenna', 'string',
+        '/heightDiffToAntenna', 'number']
+    ];
+  };
 
 }

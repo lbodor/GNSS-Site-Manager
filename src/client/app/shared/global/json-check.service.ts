@@ -3,7 +3,7 @@ import { MiscUtils } from './misc-utils';
 
 /**
  * This service class maintains the definitions of all GeodesyML elements for web UI, and provides methods to ensure
- * the existence of all required parameters/paths in the input SiteLog JSON objects.
+ * the existence of all required parameters/paths in the input ViewSiteLog JSON objects.
  */
 @Injectable()
 export class JsonCheckService {

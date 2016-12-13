@@ -120,7 +120,7 @@ export class SiteLogService {
 
   /**
    * Returns all site logs with the given siteId.
-   * @param {number} siteId - The foreign key Site Id to the SiteLog table.
+   * @param {number} siteId - The foreign key Site Id to the ViewSiteLog table.
    * @return {object[]} The Observable for the HTTP request.
    */
   getSiteLogsBySiteId(siteId: number): Observable <any> {
@@ -135,7 +135,7 @@ export class SiteLogService {
 
   /**
    * Returns one site log defined by the row id provided.
-   * @param {number} id - The primary key Id of the SiteLog record.
+   * @param {number} id - The primary key Id of the ViewSiteLog record.
    * @return {object[]} The Observable for the HTTP request.
    */
   getSiteLogById(id: number): Observable <any> {
@@ -145,7 +145,7 @@ export class SiteLogService {
   }
 
   /**
-   * Returns all records from the SiteLog table.
+   * Returns all records from the ViewSiteLog table.
    * @return {object[]} The Observable for the HTTP request.
    */
   getAllSiteLogs(): Observable <any[]> {

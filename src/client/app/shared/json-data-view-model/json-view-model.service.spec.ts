@@ -11,7 +11,7 @@ export function main() {
   let jsonViewModelService: JsonViewModelService;
   let completeValidSitelog: any = JsonViewModelServiceSpecData.data();
 
-  describe('JsonViewModelService', () => {
+  fdescribe('JsonViewModelService', () => {
 
     beforeEach(() => {
 
@@ -38,7 +38,7 @@ export function main() {
       expect(completeValidSitelog).toBeDefined();
     });
 
-    it('should translate parts', () => {
+    it('should translate parts - data to view', () => {
 
       // .subscribe(
       //   (response: any) => {
@@ -60,8 +60,56 @@ export function main() {
       // expect(siteLog.frequencyStandards.length).not.toBe(0);
       expect(siteLog.humiditySensors).toBeDefined();
       expect(siteLog.humiditySensors.length).not.toBe(0);
+      expect(siteLog.humiditySensors[0].heightDiffToAntenna).toBe(0);
+      expect(siteLog.humiditySensors[0].calibrationDate).toBe('2016-11-30T13:56:58.396Z');
+
+      // expect(siteLog.pressureSensors).toBeDefined();
+      // expect(siteLog.pressureSensors.length).not.toBe(0);
+      // expect(siteLog.temperatureSensors).toBeDefined();
+      // expect(siteLog.temperatureSensors.length).not.toBe(0);
+      // expect(siteLog.waterVaporSensors).toBeDefined();
+      // expect(siteLog.waterVaporSensors.length).not.toBe(0);
+      // expect(siteLog.siteOwner).toBeDefined();
+      // expect(siteLog.siteOwner.length).not.toBe(0);
+      // expect(siteLog.siteContact).toBeDefined();
+      // expect(siteLog.siteMetadataCustodian).toBeDefined();
+      // expect(siteLog.siteDataSource).toBeDefined();
+      // expect(siteLog.moreInformation).toBeDefined();
+      // expect(siteLog.dataStreamsSet).toBeDefined();
+
+    });
+
+    it('should translate parts - view to data', () => {
+
+      // .subscribe(
+      //   (response: any) => {
+      let siteLogViewModel: SiteLogViewModel = jsonViewModelService.dataModelToViewModelJson(completeValidSitelog);
+      let siteLogDataModel: any = jsonViewModelService.viewModelToDataModelJson(siteLogViewModel);
+
+      let siteLog: any = siteLogDataModel['geo:siteLog'];
+      // expect(siteLog).toBeDefined();
+      // console.debug('should translate parts - view model: ', siteLog.siteIdentification);
+      // expect(siteLog.siteIdentification).toBeDefined();
+      // expect(siteLog.siteIdentification.fourCharacterID).toEqual('ADE1');
+      // expect(siteLog.siteLocation).toBeDefined();
+      // expect(siteLog.siteLocation.city).toEqual('Salisbury');
+      // expect(siteLog.gnssReceivers).toBeDefined();
+      // expect(siteLog.gnssReceivers.length).not.toBe(0);
+      // expect(siteLog.gnssAntennas).toBeDefined();
+      // expect(siteLog.gnssAntennas.length).not.toBe(0);
+      // expect(siteLog.surveyedLocalTies).toBeDefined();
+      // expect(siteLog.surveyedLocalTies.length).not.toBe(0);
+      // expect(siteLog.frequencyStandards).toBeDefined();
+      // expect(siteLog.frequencyStandards.length).not.toBe(0);
+
+      // TODO - introduce HumiditySensorProeprtyType intermediatery
+      expect(siteLog.humiditySensors).toBeDefined();
+      expect(siteLog.humiditySensors.length).not.toBe(0);
+      expect(siteLog.humiditySensors[0].dateInserted.value[0]).toBe('');
+      expect(siteLog.humiditySensors[0].dateDeleted.value[0]).toBe('');
+      expect(siteLog.humiditySensors[0].deletedReason).toBe('');
       expect(siteLog.humiditySensors[0].humiditySensor.heightDiffToAntenna).toBe(0);
-      expect(siteLog.humiditySensors[0].humiditySensor.calibrationDate).toBe('2016-11-30T13:56:58.396Z');
+      expect(siteLog.humiditySensors[0].humiditySensor.calibrationDate.value[0]).toBe('2016-11-30T13:56:58.396Z'); // xx
 
       // expect(siteLog.pressureSensors).toBeDefined();
       // expect(siteLog.pressureSensors.length).not.toBe(0);

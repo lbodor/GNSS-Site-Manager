@@ -4,7 +4,7 @@ export function main() {
   let humiditySensorsDataView: any;
   let humiditySensorsViewModel: HumiditySensorsViewModel;
 
-  fdescribe('HumiditySensorsViewModel', () => {
+  describe('HumiditySensorsViewModel', () => {
 
     beforeEach(() => {
       humiditySensorsDataView = JsonViewModelServiceSpecData.data()['geo:siteLog'].humiditySensors;
@@ -31,8 +31,8 @@ export function main() {
 
       expect(firstHSV.calibrationDate).toEqual(firstHSD.calibrationDate.value[0]);
       expect(firstHSV.startDate).toEqual(firstHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0]);
-      expect(firstHSV.endDate).toEqual('');
       expect(firstHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value[0]).toBeUndefined();
+      expect(firstHSV.endDate).toEqual('');
     });
 
     it('test view to data', () => {

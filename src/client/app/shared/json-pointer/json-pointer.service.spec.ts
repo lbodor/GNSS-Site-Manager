@@ -2,7 +2,7 @@ import {JsonPointerService} from './json-pointer.service';
 
 
 export function main() {
-  describe('Testing of JsonPointerService', () => {
+  fdescribe('Testing of JsonPointerService', () => {
     let jsonObj: any;
 
     beforeEach(() => {
@@ -93,11 +93,27 @@ export function main() {
       expect(JsonPointerService.getString(jsonObj, path)).toEqual('');
     });
 
-    fit('test gml:TimePeriod in path', () => {
+    it('test gml:TimePeriod in path', () => {
       let path: string = '/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0';
       let value: string = JsonPointerService.get(jsonObj, path);
       expect(value).not.toBeNull();
       expect(value).toEqual('1234');
+    });
+
+    it('test setting what look like undefineds but arent (empty string)', () => {
+      let path: string = '/organisationName/characterString/gco:CharacterString';
+      let newValue: string = '';
+      expect(JsonPointerService.exists(jsonObj, path)).toEqual(true);
+      JsonPointerService.set(jsonObj, path, newValue);
+      expect(JsonPointerService.get(jsonObj, path)).toEqual(newValue);
+    });
+
+    it('test setting what look like undefineds but arent (zero)', () => {
+      let path: string = '/organisationName/characterString/gco:CharacterString';
+      let newValue: number = 0;
+      expect(JsonPointerService.exists(jsonObj, path)).toEqual(true);
+      JsonPointerService.set(jsonObj, path, newValue);
+      expect(JsonPointerService.get(jsonObj, path)).toEqual(newValue);
     });
   });
 }

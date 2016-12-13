@@ -11,7 +11,7 @@ export function main() {
   let jsonViewModelService: JsonViewModelService;
   let completeValidSitelog: any = JsonViewModelServiceSpecData.data();
 
-  fdescribe('JsonViewModelService', () => {
+  describe('JsonViewModelService', () => {
 
     beforeEach(() => {
 

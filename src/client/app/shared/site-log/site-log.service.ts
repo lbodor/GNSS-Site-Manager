@@ -9,6 +9,7 @@ import {HttpUtilsService} from '../global/http-utils.service';
 import {ConstantsService} from '../global/constants.service';
 import {JsonViewModelService} from '../json-data-view-model/json-view-model.service';
 import {SiteLogViewModel} from '../json-data-view-model/view-model/SiteLogViewModel';
+import {SiteLogDataModel} from '../json-data-view-model/data-model/SiteLogDataModel';
 
 /**
  * This class provides the service with methods to retrieve CORS Setup info from DB.
@@ -159,9 +160,11 @@ export class SiteLogService {
    *
    * @param siteLogJson in Json (that will be translated to GeodesyML before posting to the backend service)
    */
-  saveSiteLog(siteLogJson: any): Observable<Response> {
-    console.log('saveSiteLog - json: ', siteLogJson);
-    let siteLogML: string = this.jsonixService.jsonToGeodesyML(siteLogJson);
+  saveSiteLog(siteLogViewModel: SiteLogViewModel): Observable<Response> {
+    console.log('saveSiteLog - siteLogViewModel: ', siteLogViewModel);
+    let siteLogDataModel: SiteLogDataModel = this.jsonViewModelService.viewModelToDataModelJson(siteLogViewModel);
+    console.log('saveSiteLog - siteLogDataModel: ', siteLogDataModel);
+    let siteLogML: string = this.jsonixService.jsonToGeodesyML(siteLogDataModel);
     // Add wrapper element
     let geodesyMl: string = '<geo:GeodesyML xsi:schemaLocation="urn:xml-gov-au:icsm:egeodesy:0.3"' +
       ' xmlns:geo="urn:xml-gov-au:icsm:egeodesy:0.3" xmlns:gml="http://www.opengis.net/gml/3.2"' +

@@ -2,7 +2,7 @@ import {GeodesyEvent, EventNames} from '../events-messages/Event';
 export abstract class AbstractGroup {
   isGroupOpen: boolean = false;
   hasGroupANewItem: boolean = false;
-  private itemName: string = 'Humidity Sensor';
+  private itemName: string = 'SHOULD GET() THIS';
   that: any;
 
   /**

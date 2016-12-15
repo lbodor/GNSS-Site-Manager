@@ -17,7 +17,7 @@ export class HumiditySensors {
     for (let humiditySensorsDataModel of humiditySensorsDataModels) {
       let viewModel: HumiditySensorViewModel = new HumiditySensorViewModel();
       let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(viewModel.fieldMapping());
-      dataViewTranslatorService.translateD2V(humiditySensorsDataModel.humiditySensor, viewModel);
+      dataViewTranslatorService.translateD2V(humiditySensorsDataModel, viewModel);  // humiditySensor
       humiditySensorViewModels.push(viewModel);
     }
     return humiditySensorViewModels;
@@ -30,34 +30,34 @@ export class HumiditySensors {
       let dataModel: any = {};
       let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(viewModel.fieldMapping());
       dataViewTranslatorService.translateV2D(humiditySensorsViewModel, dataModel);
-      humiditySensorDataModels.push(new HumiditySensorPropertyType(dataModel));
+      humiditySensorDataModels.push(dataModel);//new HumiditySensorPropertyType(dataModel));
     }
     return humiditySensorDataModels;
   }
 }
 
-class ValueArray {
-  value: string[];
-
-  constructor(item0: string) {
-    this.value = [];
-    this.value.push(item0);
-  }
-}
-
-export class HumiditySensorPropertyType {
-  public dateInserted: ValueArray;
-  public dateDeleted: ValueArray;
-  public deletedReason: string;
-  public humiditySensor: any;
-
-  constructor(humiditySensor: any) {
-    this.humiditySensor = humiditySensor;
-    this.dateInserted = new ValueArray('');
-    this.dateDeleted = new ValueArray('');
-    this.deletedReason='';
-  }
-}
+// class ValueArray {
+//   value: string[];
+//
+//   constructor(item0: string) {
+//     this.value = [];
+//     this.value.push(item0);
+//   }
+// }
+//
+// export class HumiditySensorPropertyType {
+//   // public dateInserted: ValueArray;
+//   // public dateDeleted: ValueArray;
+//   // public deletedReason: string;
+//   public humiditySensor: any;
+//
+//   constructor(humiditySensor: any) {
+//     this.humiditySensor = humiditySensor;
+//     // this.dateInserted = new ValueArray('');
+//     // this.dateDeleted = new ValueArray('');
+//     // this.deletedReason='';
+//   }
+// }
 
 export class HumiditySensorViewModel extends AbstractViewModel {
   /**
@@ -96,34 +96,34 @@ export class HumiditySensorViewModel extends AbstractViewModel {
 
   getFieldMappings(): string[][] {
     return [
-      ['/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0', 'string',
+      ['/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0', 'string',
         '/startDate', 'string'],
 
-      ['/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0', 'string',
+      ['/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0', 'string',
         '/endDate', 'string'],
 
-      ['/calibrationDate/value/0', 'string',
+      ['/humiditySensor/calibrationDate/value/0', 'string',
         '/calibrationDate', 'string'],
 
-      ['/dataSamplingInterval', 'string',
+      ['/humiditySensor/dataSamplingInterval', 'string',
         '/dataSamplingInterval', 'number'],
 
-      ['/accuracyPercentRelativeHumidity', 'string',
+      ['/humiditySensor/accuracyPercentRelativeHumidity', 'string',
         '/accuracyPercentRelativeHumidity', 'number'],
 
-      ['/aspiration', 'string',
+      ['/humiditySensor/aspiration', 'string',
         '/aspiration', 'string'],
 
-      ['/notes', 'string',
+      ['/humiditySensor/notes', 'string',
         '/notes', 'string'],
 
-      ['/manufacturer', 'string',
+      ['/humiditySensor/manufacturer', 'string',
         '/manufacturer', 'string'],
 
-      ['/serialNumber', 'string',
+      ['/humiditySensor/serialNumber', 'string',
         '/serialNumber', 'string'],
 
-      ['/heightDiffToAntenna', 'string',
+      ['/humiditySensor/heightDiffToAntenna', 'string',
         '/heightDiffToAntenna', 'number']
     ];
   };

@@ -158,13 +158,13 @@ export class HumiditySensorsGroupComponent extends AbstractGroup {
     return newSensor;
   }
 
-  private newSensorProperty(humiditySensor: HumiditySensorViewModel): HumiditySensorPropertyType {
-    let newSensorContainer: HumiditySensorPropertyType = new HumiditySensorPropertyType(humiditySensor);
-    // this.makeItemsPropertyExist(newSensorContainer);
-
-    // newSensorContainer.humiditySensor = theHumiditySensor;
-    return newSensorContainer;
-  }
+  // private newSensorProperty(humiditySensor: HumiditySensorViewModel): HumiditySensorPropertyType {
+  //   let newSensorContainer: HumiditySensorPropertyType = new HumiditySensorPropertyType(humiditySensor);
+  //   // this.makeItemsPropertyExist(newSensorContainer);
+  //
+  //   // newSensorContainer.humiditySensor = theHumiditySensor;
+  //   return newSensorContainer;
+  // }
 
 
   /**
@@ -192,14 +192,14 @@ export class HumiditySensorsGroupComponent extends AbstractGroup {
     }
 
     let newSensor: HumiditySensorViewModel = this.newSensor();
-    let newSensorProperty = this.newSensorProperty(newSensor);
+    // let newSensorProperty = this.newSensorProperty(newSensor);
     // let newSensorPropertyCopy = this.miscUtilsService.cloneJsonObj(newSensorProperty);
     let newSensorCopy = MiscUtils.cloneJsonObj(newSensor);
 
     newSensor.calibrationDate = presentDT;
     newSensor.startDate = presentDT;
 
-    console.log('New sensor: ', newSensorProperty);
+    console.log('New sensor: ', newSensor);
 
     // Add the new humidity sensor as current one
     this.getItemsCollection().unshift(newSensor);//newSensorProperty);

@@ -1,4 +1,4 @@
-import {DataViewTranslatorService} from './data-view-translator.service';
+import {DataViewTranslatorService} from './data-view-translator';
 import {JsonViewModelServiceSpecData} from './json-view-model.service.spec.data';
 import {FieldMaps} from './FieldMap';
 import {SiteLogDataModel} from './data-model/SiteLogDataModel';

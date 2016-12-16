@@ -1,4 +1,4 @@
-import {DataViewTranslatorService} from '../shared/json-data-view-model/data-view-translator.service';
+import {DataViewTranslatorService} from '../shared/json-data-view-model/data-view-translator';
 import {AbstractViewModel} from '../shared/json-data-view-model/view-model/AbstractViewModel';
 
 /**

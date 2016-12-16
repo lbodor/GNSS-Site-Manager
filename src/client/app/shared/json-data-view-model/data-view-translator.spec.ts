@@ -9,7 +9,7 @@ export function main() {
   let dataViewTranslatorService: DataViewTranslatorService;
   // let jsonPointerService: JsonPointerService;
   let completeValidSitelog: SiteLogDataModel = JsonViewModelServiceSpecData.data();
-  let fieldMappings: FieldMaps = new HumiditySensorViewModel().fieldMapping();
+  let fieldMappings: FieldMaps = new HumiditySensorViewModel().getFieldMap();
 
   describe('Json view translator service', () => {
 

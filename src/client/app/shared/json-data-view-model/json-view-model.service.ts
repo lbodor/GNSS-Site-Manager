@@ -3,8 +3,12 @@ import {Injectable} from '@angular/core';
 import {SiteLogDataModel, DataSiteLog} from './data-model/SiteLogDataModel';
 // import {HttpUtilsService} from '../global/http-utils.service';
 // import {Subscriber} from 'rxjs';
-import {HumiditySensors} from '../../humidity-sensor/humiditySensor-view-model';
+import {HumiditySensorViewModel} from '../../humidity-sensor/humiditySensor-view-model';
 import {SiteLogViewModel, ViewSiteLog} from './view-model/SiteLogViewModel';
+import {AbstractViewModel} from './view-model/AbstractViewModel';
+import {DataViewTranslatorService} from './data-view-translator';
+import {FieldMaps} from './FieldMap';
+import {MiscUtilsService} from '../global/misc-utils.service';
 
 /**
  * This class provides the service to convert from 'Geodesy data model JSON' (from the XML via Jsonix) to
@@ -13,6 +17,9 @@ import {SiteLogViewModel, ViewSiteLog} from './view-model/SiteLogViewModel';
 
 @Injectable()
 export class JsonViewModelService {
+  constructor(private miscUtilsService: MiscUtilsService) {
+    //comment
+  }
 
   /**
    * Given Geodesy data model JSON, translate to view model json.
@@ -40,7 +47,8 @@ export class JsonViewModelService {
     // let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(humiditySensorViewModel.fieldMapping());
     // dataViewTranslatorService.translateD2V(siteLogDataModel)
     // humiditySensorViewModel.createFromDataModel(siteLogDataModel['geo:siteLog'].humiditySensors);
-    siteLogViewModel.siteLog.humiditySensors = HumiditySensors.dataToViewModel(siteLogDataModel['geo:siteLog'].humiditySensors);
+    siteLogViewModel.siteLog.humiditySensors = <HumiditySensorViewModel[]> this.dataToViewModel(
+      siteLogDataModel['geo:siteLog'].humiditySensors, new HumiditySensorViewModel());
     //   console.debug('translateToView subscribe fn - siteIdentification: ', siteLogViewModel.siteIdentification);
     // siteLogViewModel.pressureSensors = PressureSensors.translateDataToView(siteLogDataModel);
     // siteLogViewModel.temperatureSensors = TemperatureSensors.translateDataToView(siteLogDataModel);
@@ -73,7 +81,7 @@ export class JsonViewModelService {
     return siteLogViewModel;
   }
 
-  public viewModelToDataModelJson(viewModelJson: SiteLogViewModel ): SiteLogDataModel  {
+  public viewModelToDataModelJson(viewModelJson: SiteLogViewModel): SiteLogDataModel {
     console.debug('viewModelToDataModelJson - viewModelJson: ', viewModelJson);
 
     // let siteLogDataModel: SiteLogDataModel = <SiteLogDataModel> dataModelJson;
@@ -94,7 +102,7 @@ export class JsonViewModelService {
     // let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(humiditySensorViewModel.fieldMapping());
     // dataViewTranslatorService.translateD2V(siteLogDataModel)
     // humiditySensorViewModel.createFromDataModel(siteLogDataModel['geo:siteLog'].humiditySensors);
-    siteLogDataModel['geo:siteLog'].humiditySensors = HumiditySensors.viewToDataModel(viewModelJson.siteLog.humiditySensors);
+    siteLogDataModel['geo:siteLog'].humiditySensors = this.viewToDataModel(viewModelJson.siteLog.humiditySensors, new HumiditySensorViewModel());
     //   console.debug('translateToView subscribe fn - siteIdentification: ', siteLogViewModel.siteIdentification);
     // siteLogViewModel.pressureSensors = PressureSensors.translateDataToView(siteLogDataModel);
     // siteLogViewModel.temperatureSensors = TemperatureSensors.translateDataToView(siteLogDataModel);
@@ -125,5 +133,44 @@ export class JsonViewModelService {
     siteLogDataModel['geo:siteLog'].dataStreamsSet = viewModelJson.siteLog.dataStreamsSet;
 
     return siteLogDataModel;
+  }
+
+  /* ***************************** Helper functions ***************************** */
+  /**
+   * Translate data model to view model
+   * @param dataModels - array of data model items to convert
+   * @param viewModelInstance - used as a template to copy and populate.  And has methods used.
+   * @returns {AbstractViewModel[]} that is the super type of all view model types
+   */
+  private dataToViewModel(dataModels: any[], viewModelInstance: AbstractViewModel, singleInstance: AbstractViewModel): AbstractViewModel[] {
+    let viewModels: AbstractViewModel[] = [];
+    let fieldMappings: FieldMaps = singleInstance.getFieldMap();
+    for (let dataModel of dataModels) {
+      let blankViewModel: AbstractViewModel = this.miscUtilsService.cloneJsonObj(viewModelInstance);
+      // let viewModel: AbstractViewModel = {};//new HumiditySensorViewModel();
+      // let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(fieldMappings);
+      DataViewTranslatorService.translateD2V(dataModel, blankViewModel, fieldMappings);  // humiditySensor
+      viewModels.push(blankViewModel);
+    }
+    return viewModels;
+  }
+
+  /**
+   * Translate view model to data model
+   * @param viewModels - array of view model items to convert
+   * @param viewModelInstance - used as a template to copy and populate.  And has methods used.
+   * @returns {any[]} - translated data model
+   */
+  private viewToDataModel(viewModels: AbstractViewModel[]): any[] {
+    let dataModels: any[] = [];
+    // let viewModel: HumiditySensorViewModel = new HumiditySensorViewModel();
+    let fieldMappings: FieldMaps = viewModels[0].getFieldMap();
+    for (let viewModel of viewModels) {
+      let dataModel: any = {};
+      // let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(viewModel.fieldMapping());
+      DataViewTranslatorService.translateV2D(viewModel, dataModel, fieldMappings);
+      dataModels.push(dataModel);//new HumiditySensorPropertyType(dataModel));
+    }
+    return dataModels;
   }
 }

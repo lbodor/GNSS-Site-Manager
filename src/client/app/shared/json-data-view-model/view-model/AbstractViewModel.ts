@@ -1,27 +1,17 @@
-import {FieldMapper} from '../FieldMapper';
 import {FieldMaps, FieldMap} from '../FieldMap';
 import {ViewTypedPointer} from '../ViewTypedPointer';
 import {TypedPointer} from '../TypedPointer';
 import {DataTypedPointer} from '../DataTypedPointer';
 
-export abstract class AbstractViewModel implements FieldMapper {
+export abstract class AbstractViewModel { //implements FieldMapper {
   /**
-   * Method for clients to implement that return the raw mappings from data to view. It is an array of arrays.
-   * Each of the internal arrays contain 4 items:
-   *  [data json pointer, data type at that data pointer, view json pointer, data type at that view pointer]
-   */
-  public abstract getFieldMappings(): string[][];
-
-  /**
-   * Build data structure that maps between data and view models.  Uses array of arrays from getFieldMappings()
+   * Build data structure that maps between data and view models.  Uses array of arrays from getRawFieldMappings()
    *
    * Define the view models as data elements with given type in the extending classes
    *
    * @returns {FieldMaps}
    */
-  fieldMapping(): FieldMaps {
-    let rawFieldMappings: string[][] = this.getFieldMappings();
-
+  private fieldMapping(rawFieldMappings: string[][]): FieldMaps {
     if (rawFieldMappings.length === 0) {
       throw new Error('fieldMappings contains no items');
     }
@@ -51,4 +41,19 @@ export abstract class AbstractViewModel implements FieldMapper {
     assert(viewPath.match(/\/.*/));
     assert(viewPathType.match(/number|string/));
   }
+
+  /**
+   * Method for clients to implement that return the raw mappings from data to view. It is an array of arrays.
+   * Each of the internal arrays contain 4 items:
+   *  [data json pointer, data type at that data pointer, view json pointer, data type at that view pointer]
+   */
+  public getFieldMap(): FieldMaps {
+    return this.fieldMapping(this.getRawFieldMappings());
+  }
+
+  /**
+   * Simple way to specify the data / view model mappings.
+   * @returns string[][]
+   */
+  public abstract getRawFieldMappings(): string[][];
 }

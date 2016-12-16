@@ -1,8 +1,8 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {AbstractItem} from '../shared/abstract-groups-items/AbstractItem';
 import {GeodesyEvent} from '../shared/events-messages/Event';
-import {MiscUtils} from '../shared/global/misc-utils.service';
 import {HumiditySensorViewModel} from './humiditySensor-view-model';
+import {MiscUtils} from '../shared/global/misc-utils';
 
 /**
  * This class represents the SelectSiteComponent for searching and selecting CORS sites.
@@ -46,10 +46,6 @@ export class HumiditySensorItemComponent extends AbstractItem {
    * @type {EventEmitter<boolean>}
    */
   @Output() returnEvents = new EventEmitter<GeodesyEvent>();
-
-  constructor() {
-    super();
-  }
 
   getGeodesyEvent(): GeodesyEvent {
     return this.geodesyEvent;

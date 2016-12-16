@@ -1,4 +1,5 @@
 import {GeodesyEvent, EventNames} from '../events-messages/Event';
+import {AbstractViewModel} from '../json-data-view-model/view-model/AbstractViewModel';
 export abstract class AbstractGroup {
   isGroupOpen: boolean = false;
   hasGroupANewItem: boolean = false;
@@ -95,18 +96,10 @@ export abstract class AbstractGroup {
   abstract addNewItem(): void;
 
   /**
-   * Method that constructs the items and makes sure that all mandatory (or used somewhere) fields exist.
-   * On the item.
-   *
-   * @param item
-   */
-  abstract makeItemExist(item: any): void;
-
-  /**
    * Method that constructs the itemsProperty and makes sure that all mandatory (or used somewhere) fields exist.
    * @param itemsProperty
    */
-  abstract makeItemsPropertyExist(itemsProperty: any): void;
+  // abstract makeItemsPropertyExist(itemsProperty: any): void;
 
   /**
    * Subclasses can create a comparator relevant for their data structures.  Reduce size in these by
@@ -116,7 +109,7 @@ export abstract class AbstractGroup {
    * @param obj2
    */
   // abstract getComparator = (obj1: any, obj2: any): number
-  abstract getComparator(obj1: any, obj2: any): number;
+  abstract getComparator(obj1: AbstractViewModel, obj2: AbstractViewModel): number;
 
   constructor() {
     this.itemName = this.getWhatIsTheItemName();
@@ -156,7 +149,6 @@ export abstract class AbstractGroup {
   setItemsCollection(itemProperties: any[]) {
     this.itemProperties = itemProperties;
     if (itemProperties && itemProperties.length > 0) {
-      this.populateDefaultExistingItems(this.itemProperties);
       this.sortUsingComparator(this.itemProperties);
     }
   }
@@ -164,7 +156,6 @@ export abstract class AbstractGroup {
   setItemsOriginalCollection(itemProperties: any[]) {
     this.itemOriginalProperties = itemProperties;
     if (itemProperties && itemProperties.length > 0) {
-      this.populateDefaultExistingItems(this.itemOriginalProperties);
       this.sortUsingComparator(this.itemOriginalProperties);
     }
   }
@@ -183,19 +174,6 @@ export abstract class AbstractGroup {
         break;
       default:
         console.log('returnEvents - unknown event: ', EventNames[geodesyEvent.name]);
-    }
-  }
-
-  /**
-   * Make sure the loaded Humidity Sensors have all values including any default ones.
-   *
-   * @param humiditySensors
-   */
-  private populateDefaultExistingItems(items: any[]) {
-    if (items) {
-      for (let humiditySensorProperty of items) {
-        this.makeItemExist(humiditySensorProperty.humiditySensor);
-      }
     }
   }
 
@@ -237,6 +215,7 @@ export abstract class AbstractGroup {
     collection.sort(this.getComparator);
   }
 
+  //
   /**
    * Comparator for sorting by object.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0].
    * @param obj1

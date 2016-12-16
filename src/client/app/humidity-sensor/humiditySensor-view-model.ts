@@ -1,63 +1,4 @@
-import {DataViewTranslatorService} from '../shared/json-data-view-model/data-view-translator';
 import {AbstractViewModel} from '../shared/json-data-view-model/view-model/AbstractViewModel';
-
-/**
- * Class to assist with creating and managing the ViewModel instances
- */
-export class HumiditySensors {
-
-  /**
-   * Create the ViewModels array by translating from the JSON data model (from GeodesyML) object.
-   *
-   * @param humiditySensorsDataModels from the JSON data model (from GeodesyML) object
-   * @return HumiditySensorViewModel[]
-   */
-  static dataToViewModel(humiditySensorsDataModels: any[]): HumiditySensorViewModel[] {
-    let humiditySensorViewModels: HumiditySensorViewModel[] = [];
-    for (let humiditySensorsDataModel of humiditySensorsDataModels) {
-      let viewModel: HumiditySensorViewModel = new HumiditySensorViewModel();
-      let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(viewModel.fieldMapping());
-      dataViewTranslatorService.translateD2V(humiditySensorsDataModel, viewModel);  // humiditySensor
-      humiditySensorViewModels.push(viewModel);
-    }
-    return humiditySensorViewModels;
-  }
-
-  static viewToDataModel(humiditySensorsViewModels: HumiditySensorViewModel[]): any[] {
-    let humiditySensorDataModels: any[] = [];
-    let viewModel: HumiditySensorViewModel = new HumiditySensorViewModel();
-    for (let humiditySensorsViewModel of humiditySensorsViewModels) {
-      let dataModel: any = {};
-      let dataViewTranslatorService: DataViewTranslatorService = new DataViewTranslatorService(viewModel.fieldMapping());
-      dataViewTranslatorService.translateV2D(humiditySensorsViewModel, dataModel);
-      humiditySensorDataModels.push(dataModel);//new HumiditySensorPropertyType(dataModel));
-    }
-    return humiditySensorDataModels;
-  }
-}
-
-// class ValueArray {
-//   value: string[];
-//
-//   constructor(item0: string) {
-//     this.value = [];
-//     this.value.push(item0);
-//   }
-// }
-//
-// export class HumiditySensorPropertyType {
-//   // public dateInserted: ValueArray;
-//   // public dateDeleted: ValueArray;
-//   // public deletedReason: string;
-//   public humiditySensor: any;
-//
-//   constructor(humiditySensor: any) {
-//     this.humiditySensor = humiditySensor;
-//     // this.dateInserted = new ValueArray('');
-//     // this.dateDeleted = new ValueArray('');
-//     // this.deletedReason='';
-//   }
-// }
 
 export class HumiditySensorViewModel extends AbstractViewModel {
   /**
@@ -94,7 +35,7 @@ export class HumiditySensorViewModel extends AbstractViewModel {
     this.heightDiffToAntenna = existing && existing.heightDiffToAntenna || 0;
   }
 
-  getFieldMappings(): string[][] {
+  getRawFieldMappings(): string[][] {
     return [
       ['/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0', 'string',
         '/startDate', 'string'],
@@ -127,5 +68,4 @@ export class HumiditySensorViewModel extends AbstractViewModel {
         '/heightDiffToAntenna', 'number']
     ];
   };
-
 }

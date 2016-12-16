@@ -1,0 +1,22 @@
+import { Injectable } from '@angular/core';
+import { HttpUtilsService } from '../global/http-utils.service';
+
+@Injectable()
+export class FormFieldConfigurationService {
+  private mappingFile: string = '/assets/field-mapping.json';
+  private attrMappingJson: any = {};
+
+  constructor(private httpService: HttpUtilsService) {
+    // Load the XML attribute name mapping JSON object from assets
+    this.httpService.loadJsonObject(this.mappingFile).subscribe(
+      json => this.attrMappingJson = json,
+      error => console.log('Error in loading Json file: ' + error)
+    );
+  }
+
+  private getObjectForKey(key: string): string {
+    let returnVal: Array<string> = this.attrMappingJson[key];
+    console.log('fetched value for key ' + key + ': ' + JSON.stringify(returnVal)); 
+        console.log('value =  ' + key); 
+  }
+}

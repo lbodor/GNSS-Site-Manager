@@ -59,19 +59,16 @@
                         No information available for current GNSS pressure sensor
                     </div>
                     <div *ngIf=" pressureSensor != null ">
-                        <div class="form-group">
-                            <label class="col-md-4 col-sm-4 col-xs-5 col-xxs-12 control-label required">Manufacturer</label>
-                            <div class="col-md-5 col-sm-6 col-xs-6 col-xxs-12">
-                                <input required type="text" maxlength="100" class="form-control"
-                                       [(ngModel)]="pressureSensor.manufacturer"
-                                       name="pressureSensorManufacturer_{{i}}"
-                                       #manufacturer="ngModel"/>
-                                 <small [hidden]="manufacturer.valid || manufacturer.pristine"
-                         			class="alert alert-danger">
-                    				"Manufacturer" is required
-                    			 </small>
-                            </div>
-                        </div>
+                    
+                        <gnss-text-input
+                            [name]="'pressureSensorManufacturer'"
+                            [label]="'Manufacturer'"
+                            [(model)]="pressureSensor.manufacturer"
+                            [index]="[i]"
+                            [maxlength]="'100'"
+                            [required]="'required'">
+                        </gnss-text-input>
+                    
                         <div class="form-group">
                             <label class="col-md-4 col-sm-4 col-xs-5 col-xxs-12 control-label required">Serial Number</label>
                             <div class="col-md-5 col-sm-6 col-xs-6 col-xxs-12">

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
+// TODO - these should all be statics
 export class MiscUtilsService {
 
   private _scrollIntoView: any = require('scroll-into-view');

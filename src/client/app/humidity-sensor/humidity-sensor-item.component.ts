@@ -28,13 +28,6 @@ export class HumiditySensorItemComponent extends AbstractItem {
    */
   @Input() humiditySensor: HumiditySensorViewModel;
 
-  // set humiditySensorProperty(humiditySensorProperty: any) {
-  //   // Done this way to give use the option of extracting the other fields -
-  //   // dateInserted and Deleted and deletedReason from the HS wrapper
-  //   this.humiditySensor = humiditySensorProperty.humiditySensor;
-  //   console.log('humiditySensor: ', this.humiditySensor);
-  // }
-
   /**
    * This is to receive geodesyEvent from parent.
    */

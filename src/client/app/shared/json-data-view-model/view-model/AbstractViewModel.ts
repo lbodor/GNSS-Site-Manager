@@ -3,7 +3,7 @@ import {ViewTypedPointer} from '../ViewTypedPointer';
 import {TypedPointer} from '../TypedPointer';
 import {DataTypedPointer} from '../DataTypedPointer';
 
-export abstract class AbstractViewModel { //implements FieldMapper {
+export abstract class AbstractViewModel {
   /**
    * Build data structure that maps between data and view models.  Uses array of arrays from getRawFieldMappings()
    *

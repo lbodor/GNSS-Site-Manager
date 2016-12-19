@@ -1,10 +1,8 @@
-// import {Injectable} from '@angular/core';
 import {JsonPointerService} from '../json-pointer/json-pointer.service';
 import {FieldMaps} from './FieldMap';
 import {DataTypedPointer} from './DataTypedPointer';
 import {ViewTypedPointer} from './ViewTypedPointer';
 
-// @Injectable()
 export class DataViewTranslatorService {
 
   /**

@@ -1,8 +1,13 @@
 import {HumiditySensorViewModel} from '../../../humidity-sensor/humiditySensor-view-model';
+
 /**
- * ViewModel equivalent of ../data-model/SiteLogDataModel
+ * View Model equivalent of ../data-model/SiteLogDataModel
  */
-export interface ViewSiteLog {
+export class SiteLogViewModel {
+  siteLog: ViewSiteLog;
+}
+
+export class ViewSiteLog {
   siteIdentification: any;
   siteLocation: any;
   gnssReceivers: any[];
@@ -19,8 +24,4 @@ export interface ViewSiteLog {
   siteDataSource: any;
   moreInformation: any;
   dataStreamsSet: any;
-}
-
-export interface SiteLogViewModel {
-  siteLog: ViewSiteLog;
 }

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpUtilsService} from './http-utils.service';
 import {MiscUtils} from './misc-utils';
-import {diff} from 'deep-diff';
 
 @Injectable()
 export class JsonDiffService {
@@ -30,10 +29,6 @@ export class JsonDiffService {
     let diffArray: any = this.detectChanges(jsonDiff);
     let result: string = this.formatToHtml(diffArray);
 
-    let differences: any = diff.diff(oldJson, newJson);
-    console.log('deep-diff: ', differences);
-    console.log('  old: ', oldJson);
-    console.log('  new: ', newJson);
     return result;
   }
 

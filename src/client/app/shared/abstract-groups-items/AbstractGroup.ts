@@ -46,7 +46,7 @@ export abstract class AbstractGroup {
    * @param obj
    * @returns {any}
    *
-   * TODO - replace by inline Dottie call
+   * TODO - no longer needed (confirm)
    */
   public static getBeginPositionDate(obj: any) {
     if (obj && obj.validTime && obj.validTime.abstractTimePrimitive && obj.validTime.abstractTimePrimitive['gml:TimePeriod']
@@ -57,7 +57,7 @@ export abstract class AbstractGroup {
     }
   }
 
-  // TODO - replace by inline Dottie call
+  // TODO - no longer needed (confirm)
   public static getEndPositionDate(obj: any) {
     if (obj && obj.validTime && obj.validTime.abstractTimePrimitive && obj.validTime.abstractTimePrimitive['gml:TimePeriod']
       && obj.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition
@@ -94,12 +94,6 @@ export abstract class AbstractGroup {
    * Add a new item
    */
   abstract addNewItem(): void;
-
-  /**
-   * Method that constructs the itemsProperty and makes sure that all mandatory (or used somewhere) fields exist.
-   * @param itemsProperty
-   */
-  // abstract makeItemsPropertyExist(itemsProperty: any): void;
 
   /**
    * Subclasses can create a comparator relevant for their data structures.  Reduce size in these by
@@ -215,7 +209,6 @@ export abstract class AbstractGroup {
     collection.sort(this.getComparator);
   }
 
-  //
   /**
    * Comparator for sorting by object.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0].
    * @param obj1

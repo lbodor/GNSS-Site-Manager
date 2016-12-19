@@ -332,7 +332,8 @@ export class SiteInfoComponent implements OnInit, OnDestroy {
         that.status.hasNewTemperatureSensor = false;
         that.status.hasNewWaterVaporSensor = false;
         that.status.hasNewEpisodicEffect = false;
-        let siteLogViewModel: SiteLogViewModel  = { siteLog: that.siteLogModel };
+        let siteLogViewModel: SiteLogViewModel  = new SiteLogViewModel();
+        siteLogViewModel.siteLog=that.siteLogModel;
         that.siteLogService.saveSiteLog(siteLogViewModel).subscribe(
           (responseJson: any) => {
             //if (form)form.pristine = true;  // Note: pristine has no setter method in ng2-form!

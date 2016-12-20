@@ -1,4 +1,4 @@
-import {FieldMaps, FieldMap} from '../field-map';
+import {FieldMaps, FieldMap} from '../field-maps';
 import {TypedPointer} from '../typed-pointer';
 
 export abstract class AbstractViewModel {

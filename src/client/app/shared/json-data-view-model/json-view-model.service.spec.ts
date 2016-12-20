@@ -4,7 +4,7 @@ import {MockBackend} from '@angular/http/testing';
 import {JsonViewModelService} from './json-view-model.service';
 // import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 import {JsonViewModelServiceSpecData} from './json-view-model.service.spec.data';
-import {SiteLogViewModel} from './view-model/SiteLogViewModel';
+import {SiteLogViewModel} from './view-model/site-log-view-model';
 import {MiscUtilsService} from '../global/misc-utils.service';
 
 export function main() {

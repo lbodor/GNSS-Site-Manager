@@ -8,7 +8,7 @@ import {WFSService, SelectSiteSearchType} from '../wfs/wfs.service';
 import {HttpUtilsService} from '../global/http-utils.service';
 import {ConstantsService} from '../global/constants.service';
 import {JsonViewModelService} from '../json-data-view-model/json-view-model.service';
-import {SiteLogViewModel} from '../json-data-view-model/view-model/SiteLogViewModel';
+import {SiteLogViewModel} from '../json-data-view-model/view-model/site-log-view-model';
 import {SiteLogDataModel} from '../json-data-view-model/data-model/site-log-data-model';
 
 /**

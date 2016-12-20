@@ -1,31 +1,14 @@
 import {DataViewTranslatorService} from './data-view-translator';
 import {JsonViewModelServiceSpecData} from './json-view-model.service.spec.data';
-import {FieldMaps} from './FieldMap';
-import {SiteLogDataModel} from './data-model/SiteLogDataModel';
+import {FieldMaps} from './field-map';
+import {SiteLogDataModel} from './data-model/site-log-data-model';
 import {HumiditySensorViewModel} from '../../humidity-sensor/humiditySensor-view-model';
-// import {ReflectiveInjector} from '@angular/core';
 
 export function main() {
-  // let dataViewTranslatorService: DataViewTranslatorService;
-  // let jsonPointerService: JsonPointerService;
   let completeValidSitelog: SiteLogDataModel = JsonViewModelServiceSpecData.data();
   let fieldMappings: FieldMaps = new HumiditySensorViewModel().getFieldMaps();
 
   describe('Json view translator service', () => {
-
-    // beforeEach(() => {
-
-      // let injector = ReflectiveInjector.resolveAndCreate([
-      //   DataViewTranslatorService,
-      //   {
-      //     provide: FieldMaps, useValue: fieldMappings
-      //
-      //   }
-      // ]);
-      // dataViewTranslatorService = new DataViewTranslatorService(jsonPointerService, fieldMappings);
-      // dataViewTranslatorService = injector.get(DataViewTranslatorService);
-      // jsonPointerService = injector.get(JsonPointerService);
-    // });
 
     it('should be defined', () => {
       // expect(dataViewTranslatorService).toBeDefined();
@@ -38,7 +21,7 @@ export function main() {
     it('should translate d2v for humiditySensors', () => {
       let humiditySensorsData: any = completeValidSitelog['geo:siteLog'].humiditySensors;
       expect(humiditySensorsData).toBeDefined();
-      let firstHSD: any = humiditySensorsData[0].humiditySensor;
+      let firstHSD: any = humiditySensorsData[0];
 
       let firstHSV: HumiditySensorViewModel = new HumiditySensorViewModel();
 
@@ -46,17 +29,17 @@ export function main() {
 
       expect(firstHSV).toBeDefined();
 
-      expect(firstHSV.accuracyPercentRelativeHumidity).toEqual(firstHSD.accuracyPercentRelativeHumidity);
-      expect(firstHSV.aspiration).toEqual(firstHSD.aspiration);
-      expect(firstHSV.dataSamplingInterval).toEqual(firstHSD.dataSamplingInterval);
-      expect(firstHSV.heightDiffToAntenna).toEqual(firstHSD.heightDiffToAntenna);
-      expect(firstHSV.manufacturer).toEqual(firstHSD.manufacturer);
-      expect(firstHSV.notes).toEqual(firstHSD.notes);
-      expect(firstHSV.serialNumber).toEqual(firstHSD.serialNumber);
+      expect(firstHSV.accuracyPercentRelativeHumidity).toEqual(firstHSD.humiditySensor.accuracyPercentRelativeHumidity);
+      expect(firstHSV.aspiration).toEqual(firstHSD.humiditySensor.aspiration);
+      expect(firstHSV.dataSamplingInterval).toEqual(firstHSD.humiditySensor.dataSamplingInterval);
+      expect(firstHSV.heightDiffToAntenna).toEqual(firstHSD.humiditySensor.heightDiffToAntenna);
+      expect(firstHSV.manufacturer).toEqual(firstHSD.humiditySensor.manufacturer);
+      expect(firstHSV.notes).toEqual(firstHSD.humiditySensor.notes);
+      expect(firstHSV.serialNumber).toEqual(firstHSD.humiditySensor.serialNumber);
 
-      expect(firstHSV.calibrationDate).toEqual(firstHSD.calibrationDate.value[0]);
-      expect(firstHSV.startDate).toEqual(firstHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0]);
-      expect(firstHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value[0]).toBeUndefined();
+      expect(firstHSV.calibrationDate).toEqual(firstHSD.humiditySensor.calibrationDate.value[0]);
+      expect(firstHSV.startDate).toEqual(firstHSD.humiditySensor.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0]);
+      expect(firstHSD.humiditySensor.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value[0]).toBeUndefined();
       expect(firstHSV.endDate).toEqual('');
     });
 
@@ -70,22 +53,22 @@ export function main() {
       DataViewTranslatorService.translateD2V(firstHSD, firstHSV, firstHSV.getFieldMaps());
 
       let newHSD: any = {};
-      DataViewTranslatorService.translateV2D(firstHSV, newHSD, newHSD.getFieldMap());
+      DataViewTranslatorService.translateV2D(firstHSV, newHSD, firstHSV.getFieldMaps());
 
       expect(newHSD).toBeDefined();
 
-      expect(newHSD.accuracyPercentRelativeHumidity).toEqual(firstHSV.accuracyPercentRelativeHumidity);
-      expect(newHSD.aspiration).toEqual(firstHSV.aspiration);
-      expect(newHSD.dataSamplingInterval).toEqual(firstHSV.dataSamplingInterval);
-      expect(newHSD.heightDiffToAntenna).toEqual(firstHSV.heightDiffToAntenna);
-      expect(newHSD.manufacturer).toEqual(firstHSV.manufacturer);
-      expect(newHSD.notes).toEqual(firstHSV.notes);
-      expect(newHSD.serialNumber).toEqual(firstHSV.serialNumber);
+      expect(newHSD.humiditySensor.accuracyPercentRelativeHumidity).toEqual(firstHSV.accuracyPercentRelativeHumidity);
+      expect(newHSD.humiditySensor.aspiration).toEqual(firstHSV.aspiration);
+      expect(newHSD.humiditySensor.dataSamplingInterval).toEqual(firstHSV.dataSamplingInterval);
+      expect(newHSD.humiditySensor.heightDiffToAntenna).toEqual(firstHSV.heightDiffToAntenna);
+      expect(newHSD.humiditySensor.manufacturer).toEqual(firstHSV.manufacturer);
+      expect(newHSD.humiditySensor.notes).toEqual(firstHSV.notes);
+      expect(newHSD.humiditySensor.serialNumber).toEqual(firstHSV.serialNumber);
 
-      expect(newHSD.calibrationDate.value[0]).toEqual(firstHSV.calibrationDate);
-      expect(firstHSV.startDate).toEqual(firstHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0]);
+      expect(newHSD.humiditySensor.calibrationDate.value[0]).toEqual(firstHSV.calibrationDate);
+      expect(firstHSV.startDate).toEqual(newHSD.humiditySensor.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0]);
       expect(firstHSV.endDate).toEqual('');
-      expect(newHSD.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value[0]).toEqual('');
+      expect(newHSD.humiditySensor.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value[0]).toEqual('');
     });
   });
 }

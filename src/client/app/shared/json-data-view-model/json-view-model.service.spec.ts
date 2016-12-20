@@ -12,7 +12,7 @@ export function main() {
   let jsonViewModelService: JsonViewModelService;
   let completeValidSitelog: any = JsonViewModelServiceSpecData.data();
 
-  fdescribe('JsonViewModelService', () => {
+  describe('JsonViewModelService', () => {
 
     beforeEach(() => {
 
@@ -64,6 +64,8 @@ export function main() {
       expect(siteLog.humiditySensors.length).not.toBe(0);
       expect(siteLog.humiditySensors[0].heightDiffToAntenna).toBe(0);
       expect(siteLog.humiditySensors[0].calibrationDate).toBe('2016-11-30T13:56:58.396Z');
+      expect(siteLog.humiditySensors[0].accuracyPercentRelativeHumidity).toBe(22);
+      expect(siteLog.humiditySensors[0].dataSamplingInterval).toBe(120);
 
       // expect(siteLog.pressureSensors).toBeDefined();
       // expect(siteLog.pressureSensors.length).not.toBe(0);

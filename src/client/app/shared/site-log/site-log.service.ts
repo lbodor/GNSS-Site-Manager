@@ -9,7 +9,7 @@ import {HttpUtilsService} from '../global/http-utils.service';
 import {ConstantsService} from '../global/constants.service';
 import {JsonViewModelService} from '../json-data-view-model/json-view-model.service';
 import {SiteLogViewModel} from '../json-data-view-model/view-model/SiteLogViewModel';
-import {SiteLogDataModel} from '../json-data-view-model/data-model/SiteLogDataModel';
+import {SiteLogDataModel} from '../json-data-view-model/data-model/site-log-data-model';
 
 /**
  * This class provides the service with methods to retrieve CORS Setup info from DB.

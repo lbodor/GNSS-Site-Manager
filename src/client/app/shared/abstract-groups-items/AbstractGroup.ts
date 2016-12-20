@@ -1,5 +1,5 @@
 import {GeodesyEvent, EventNames} from '../events-messages/Event';
-import {AbstractViewModel} from '../json-data-view-model/view-model/AbstractViewModel';
+import {AbstractViewModel} from '../json-data-view-model/view-model/abstract-view-model';
 export abstract class AbstractGroup {
   isGroupOpen: boolean = false;
   hasGroupANewItem: boolean = false;

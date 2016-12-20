@@ -1,7 +1,6 @@
 import {JsonPointerService} from '../json-pointer/json-pointer.service';
-import {FieldMaps} from './FieldMap';
-import {DataTypedPointer} from './DataTypedPointer';
-import {ViewTypedPointer} from './ViewTypedPointer';
+import {FieldMaps} from './field-map';
+import {TypedPointer} from './typed-pointer';
 
 export class DataViewTranslatorService {
 
@@ -12,8 +11,8 @@ export class DataViewTranslatorService {
    */
   static translateD2V(dataModel: any, viewModel: any, fieldMappings: FieldMaps): any {
     for (let fieldMap of fieldMappings.fieldMaps) {
-      let dataTypedPointer: DataTypedPointer = fieldMap.dataTypedPointer;
-      let viewTypedPointer: ViewTypedPointer = fieldMap.viewTypedPointer;
+      let dataTypedPointer: TypedPointer = fieldMap.dataTypedPointer;
+      let viewTypedPointer: TypedPointer = fieldMap.viewTypedPointer;
       let dataValue: string = JsonPointerService.get(dataModel, dataTypedPointer.pointer);
       if (viewTypedPointer.type === 'number') {
         JsonPointerService.set(viewModel, viewTypedPointer.pointer, parseInt(dataValue));
@@ -30,8 +29,8 @@ export class DataViewTranslatorService {
    */
   static translateV2D(viewModel: any, dataModel: any, fieldMappings: FieldMaps): any {
     for (let fieldMap of fieldMappings.fieldMaps) {
-      let dataTypedPointer: DataTypedPointer = fieldMap.dataTypedPointer;
-      let viewTypedPointer: ViewTypedPointer = fieldMap.viewTypedPointer;
+      let dataTypedPointer: TypedPointer = fieldMap.dataTypedPointer;
+      let viewTypedPointer: TypedPointer = fieldMap.viewTypedPointer;
       let viewValue: string = JsonPointerService.get(viewModel, viewTypedPointer.pointer);
       if (dataTypedPointer.type === 'number') {
         JsonPointerService.set(dataModel, dataTypedPointer.pointer, parseInt(viewValue));

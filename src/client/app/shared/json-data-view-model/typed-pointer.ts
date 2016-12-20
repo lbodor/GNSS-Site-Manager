@@ -11,5 +11,4 @@ export class TypedPointer {
     this.pointer = pointer;
     this.type = type;
   }
-
 }

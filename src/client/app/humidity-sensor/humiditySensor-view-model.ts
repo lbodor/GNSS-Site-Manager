@@ -1,4 +1,4 @@
-import {AbstractViewModel} from '../shared/json-data-view-model/view-model/AbstractViewModel';
+import {AbstractViewModel} from '../shared/json-data-view-model/view-model/abstract-view-model';
 
 export class HumiditySensorViewModel extends AbstractViewModel {
   /**
@@ -36,36 +36,36 @@ export class HumiditySensorViewModel extends AbstractViewModel {
   }
 
   createFieldMappings(): void {
-      this.addfieldMapping('/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0',
+      this.addFieldMapping('/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0',
         'string',
         '/startDate', 'string');
 
-      this.addfieldMapping('/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0',
+      this.addFieldMapping('/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/endPosition/value/0',
         'string',
         '/endDate', 'string');
 
-      this.addfieldMapping('/humiditySensor/calibrationDate/value/0', 'string',
+      this.addFieldMapping('/humiditySensor/calibrationDate/value/0', 'string',
         '/calibrationDate', 'string');
 
-      this.addfieldMapping('/humiditySensor/dataSamplingInterval', 'string',
+      this.addFieldMapping('/humiditySensor/dataSamplingInterval', 'string',
         '/dataSamplingInterval', 'number');
 
-      this.addfieldMapping('/humiditySensor/accuracyPercentRelativeHumidity', 'string',
+      this.addFieldMapping('/humiditySensor/accuracyPercentRelativeHumidity', 'string',
         '/accuracyPercentRelativeHumidity', 'number');
 
-      this.addfieldMapping('/humiditySensor/aspiration', 'string',
+      this.addFieldMapping('/humiditySensor/aspiration', 'string',
         '/aspiration', 'string');
 
-      this.addfieldMapping('/humiditySensor/notes', 'string',
+      this.addFieldMapping('/humiditySensor/notes', 'string',
         '/notes', 'string');
 
-      this.addfieldMapping('/humiditySensor/manufacturer', 'string',
+      this.addFieldMapping('/humiditySensor/manufacturer', 'string',
         '/manufacturer', 'string');
 
-      this.addfieldMapping('/humiditySensor/serialNumber', 'string',
+      this.addFieldMapping('/humiditySensor/serialNumber', 'string',
         '/serialNumber', 'string');
 
-      this.addfieldMapping('/humiditySensor/heightDiffToAntenna', 'string',
+      this.addFieldMapping('/humiditySensor/heightDiffToAntenna', 'string',
         '/heightDiffToAntenna', 'number');
   };
 }

@@ -1,7 +1,5 @@
-import {FieldMaps, FieldMap} from '../FieldMap';
-import {ViewTypedPointer} from '../ViewTypedPointer';
-import {TypedPointer} from '../TypedPointer';
-import {DataTypedPointer} from '../DataTypedPointer';
+import {FieldMaps, FieldMap} from '../field-map';
+import {TypedPointer} from '../typed-pointer';
 
 export abstract class AbstractViewModel {
   /**
@@ -25,7 +23,7 @@ export abstract class AbstractViewModel {
    * @param viewPathType - type of data in that path
    * @returns {FieldMaps}
    */
-  addfieldMapping(dataPath: string, dataPathType: string, viewPath: string, viewPathType: string): void {
+  addFieldMapping(dataPath: string, dataPathType: string, viewPath: string, viewPathType: string): void {
     if (!this.fieldMaps) {
       this.fieldMaps = new FieldMaps();
     }
@@ -34,8 +32,8 @@ export abstract class AbstractViewModel {
     }
     this.assertCorrect(dataPath, dataPathType, viewPath, viewPathType);
 
-    let dataTypePointer: TypedPointer = new DataTypedPointer(dataPath, dataPathType);
-    let viewTypePointer: TypedPointer = new ViewTypedPointer(viewPath, viewPathType);
+    let dataTypePointer: TypedPointer = new TypedPointer(dataPath, dataPathType);
+    let viewTypePointer: TypedPointer = new TypedPointer(viewPath, viewPathType);
     this.fieldMaps.add(new FieldMap(dataTypePointer, viewTypePointer));
   }
 

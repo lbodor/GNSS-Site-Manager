@@ -1,4 +1,4 @@
-import {SiteLogDataModel} from './data-model/SiteLogDataModel';
+import {SiteLogDataModel} from './data-model/site-log-data-model';
 export class JsonViewModelServiceSpecData {
   public static data(): SiteLogDataModel {
     return <SiteLogDataModel>{

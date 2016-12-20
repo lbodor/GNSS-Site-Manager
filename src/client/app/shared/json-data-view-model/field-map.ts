@@ -1,5 +1,4 @@
-import {ViewTypedPointer} from './ViewTypedPointer';
-import {DataTypedPointer} from './DataTypedPointer';
+import {TypedPointer} from './typed-pointer';
 
 /**
  * Mapping to assist in mapping data model to view model by linking both sides.
@@ -15,10 +14,10 @@ export class FieldMaps {
 }
 
 export class FieldMap {
-  dataTypedPointer: DataTypedPointer;
-  viewTypedPointer: ViewTypedPointer;
+  dataTypedPointer: TypedPointer;
+  viewTypedPointer: TypedPointer;
 
-  constructor(dataTypedPointer: DataTypedPointer, viewTypedPointer: ViewTypedPointer) {
+  constructor(dataTypedPointer: TypedPointer, viewTypedPointer: TypedPointer) {
     this.dataTypedPointer = dataTypedPointer;
     this.viewTypedPointer = viewTypedPointer;
   }

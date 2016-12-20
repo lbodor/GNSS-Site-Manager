@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {SiteLogDataModel, DataSiteLog} from './data-model/SiteLogDataModel';
+import {SiteLogDataModel, DataSiteLog} from './data-model/site-log-data-model';
 import {HumiditySensorViewModel} from '../../humidity-sensor/humiditySensor-view-model';
 import {SiteLogViewModel, ViewSiteLog} from './view-model/SiteLogViewModel';
-import {AbstractViewModel} from './view-model/AbstractViewModel';
+import {AbstractViewModel} from './view-model/abstract-view-model';
 import {DataViewTranslatorService} from './data-view-translator';
-import {FieldMaps} from './FieldMap';
+import {FieldMaps} from './field-map';
 import {MiscUtilsService} from '../global/misc-utils.service';
 
 /**

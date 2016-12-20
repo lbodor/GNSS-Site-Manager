@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {MiscUtils} from '../shared/index';
 import {AbstractGroup} from '../shared/abstract-groups-items/AbstractGroup';
 import {HumiditySensorViewModel} from './humiditySensor-view-model';
-import {AbstractViewModel} from '../shared/json-data-view-model/view-model/AbstractViewModel';
+import {AbstractViewModel} from '../shared/json-data-view-model/view-model/abstract-view-model';
 
 /**
  * This class represents the SelectSiteComponent for searching and selecting CORS sites.
@@ -48,8 +48,7 @@ export class HumiditySensorsGroupComponent extends AbstractGroup {
    * Other methods
    */
   private newItem(): AbstractViewModel {
-    let newSensor: HumiditySensorViewModel = new HumiditySensorViewModel();
-    return newSensor;
+    return new HumiditySensorViewModel();
   }
 
   /**

@@ -7,10 +7,10 @@ import {DataTypedPointer} from './DataTypedPointer';
  * mapping to translate one of view or data model to the other.
  */
 export class FieldMaps {
-  fieldMaps: FieldMap[];
+  fieldMaps: FieldMap[] = [];
 
-  constructor(fieldMaps: FieldMap[]) {
-    this.fieldMaps = fieldMaps;
+  public add(fieldMap: FieldMap) {
+    this.fieldMaps.push(fieldMap);
   }
 }
 

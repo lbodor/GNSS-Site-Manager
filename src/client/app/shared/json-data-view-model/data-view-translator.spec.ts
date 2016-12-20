@@ -3,32 +3,32 @@ import {JsonViewModelServiceSpecData} from './json-view-model.service.spec.data'
 import {FieldMaps} from './FieldMap';
 import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 import {HumiditySensorViewModel} from '../../humidity-sensor/humiditySensor-view-model';
-import {ReflectiveInjector} from '@angular/core';
+// import {ReflectiveInjector} from '@angular/core';
 
 export function main() {
-  let dataViewTranslatorService: DataViewTranslatorService;
+  // let dataViewTranslatorService: DataViewTranslatorService;
   // let jsonPointerService: JsonPointerService;
   let completeValidSitelog: SiteLogDataModel = JsonViewModelServiceSpecData.data();
-  let fieldMappings: FieldMaps = new HumiditySensorViewModel().getFieldMap();
+  let fieldMappings: FieldMaps = new HumiditySensorViewModel().getFieldMaps();
 
   describe('Json view translator service', () => {
 
-    beforeEach(() => {
+    // beforeEach(() => {
 
-      let injector = ReflectiveInjector.resolveAndCreate([
-        DataViewTranslatorService,
-        {
-          provide: FieldMaps, useValue: fieldMappings
-
-        }
-      ]);
+      // let injector = ReflectiveInjector.resolveAndCreate([
+      //   DataViewTranslatorService,
+      //   {
+      //     provide: FieldMaps, useValue: fieldMappings
+      //
+      //   }
+      // ]);
       // dataViewTranslatorService = new DataViewTranslatorService(jsonPointerService, fieldMappings);
-      dataViewTranslatorService = injector.get(DataViewTranslatorService);
+      // dataViewTranslatorService = injector.get(DataViewTranslatorService);
       // jsonPointerService = injector.get(JsonPointerService);
-    });
+    // });
 
     it('should be defined', () => {
-      expect(dataViewTranslatorService).toBeDefined();
+      // expect(dataViewTranslatorService).toBeDefined();
       expect(completeValidSitelog).toBeDefined();
       expect(fieldMappings).toBeDefined();
       expect(fieldMappings.fieldMaps).toBeDefined();
@@ -42,7 +42,7 @@ export function main() {
 
       let firstHSV: HumiditySensorViewModel = new HumiditySensorViewModel();
 
-      dataViewTranslatorService.translateD2V(firstHSD, firstHSV);
+      DataViewTranslatorService.translateD2V(firstHSD, firstHSV, firstHSV.getFieldMaps());
 
       expect(firstHSV).toBeDefined();
 
@@ -67,10 +67,10 @@ export function main() {
 
       let firstHSV: HumiditySensorViewModel = new HumiditySensorViewModel();
 
-      dataViewTranslatorService.translateD2V(firstHSD, firstHSV);
+      DataViewTranslatorService.translateD2V(firstHSD, firstHSV, firstHSV.getFieldMaps());
 
       let newHSD: any = {};
-      dataViewTranslatorService.translateV2D(firstHSV, newHSD);
+      DataViewTranslatorService.translateV2D(firstHSV, newHSD, newHSD.getFieldMap());
 
       expect(newHSD).toBeDefined();
 

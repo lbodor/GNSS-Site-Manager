@@ -3,8 +3,6 @@ import {AbstractViewModel} from '../json-data-view-model/view-model/AbstractView
 export abstract class AbstractGroup {
   isGroupOpen: boolean = false;
   hasGroupANewItem: boolean = false;
-  private itemName: string = 'SHOULD GET() THIS';
-  that: any;
 
   /**
    * Event mechanism to communicate with children.  Simply change the value of this and the children detect the change.
@@ -86,9 +84,9 @@ export abstract class AbstractGroup {
   }
 
   /**
-   * Get the item name to be usedb in the subclasses.
+   * Get the item name to be used in the subclasses and displayed in the HTML.
    */
-  abstract getWhatIsTheItemName(): string;
+  abstract getItemName(): string;
 
   /**
    * Add a new item
@@ -102,13 +100,8 @@ export abstract class AbstractGroup {
    * @param obj1
    * @param obj2
    */
-  // abstract getComparator = (obj1: any, obj2: any): number
-  abstract getComparator(obj1: AbstractViewModel, obj2: AbstractViewModel): number;
-
-  constructor() {
-    this.itemName = this.getWhatIsTheItemName();
-  }
-
+  // abstract compare = (obj1: any, obj2: any): number
+  abstract compare(obj1: AbstractViewModel, obj2: AbstractViewModel): number;
 
   /**
    * Event mechanism to communicate with children.  Simply change the value of this and the children detect the change.
@@ -126,11 +119,6 @@ export abstract class AbstractGroup {
   getHasGroupANewItem(): boolean {
     return this.hasGroupANewItem;
   }
-
-  getItemName(): string {
-    return this.itemName;
-  }
-
 
   getItemsCollection(): any {
     return this.itemProperties;
@@ -201,12 +189,12 @@ export abstract class AbstractGroup {
    */
 
   /**
-   * Use the Geodesy object defined comparator in getComparator() to sort the given collection inline.
+   * Use the Geodesy object defined comparator in compare() to sort the given collection inline.
    *
    * @param collection
    */
   sortUsingComparator(collection: any[]) {
-    collection.sort(this.getComparator);
+    collection.sort(this.compare);
   }
 
   /**

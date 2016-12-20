@@ -5,34 +5,38 @@ import {DataTypedPointer} from '../DataTypedPointer';
 
 export abstract class AbstractViewModel {
   /**
-   * Build data structure that maps between data and view models.  Uses array of arrays from getRawFieldMappings()
+   * Mapping to/from Data and View model fields.  See createFieldMappings().
+   */
+  private fieldMaps: FieldMaps;
+
+  public getFieldMaps(): FieldMaps {
+    return this.fieldMaps;
+  }
+
+  constructor() {
+    this.createFieldMappings();
+  }
+  /**
+   * Client calls this for each data/view field mappings to build fieldMaps.
    *
-   * Define the view models as data elements with given type in the extending classes
-   *
+   * @param dataPath - path in the data model
+   * @param dataPathType - type of data in that path
+   * @param viewPath - path in the view model
+   * @param viewPathType - type of data in that path
    * @returns {FieldMaps}
    */
-  private fieldMapping(rawFieldMappings: string[][]): FieldMaps {
-    if (rawFieldMappings.length === 0) {
-      throw new Error('fieldMappings contains no items');
+  addfieldMapping(dataPath: string, dataPathType: string, viewPath: string, viewPathType: string): void {
+    if (!this.fieldMaps) {
+      this.fieldMaps = new FieldMaps();
     }
-    let fieldMapsArray: FieldMap[] = [];
-    for (let rawFieldMap of rawFieldMappings) {
-      if (rawFieldMap.length < 4) {
-        throw new Error('fieldMappings isnt divisible by 4');
-      }
-      let dataPath: string = rawFieldMap[0];
-      let dataPathType: string = rawFieldMap[1];
-      let viewPath: string = rawFieldMap[2];
-      let viewPathType: string = rawFieldMap[3];
-
-      this.assertCorrect(dataPath, dataPathType, viewPath, viewPathType);
-
-      let dataTypePointer: TypedPointer = new DataTypedPointer(dataPath, dataPathType);
-      let viewTypePointer: TypedPointer = new ViewTypedPointer(viewPath, viewPathType);
-      fieldMapsArray.push(new FieldMap(dataTypePointer, viewTypePointer));
+    if (dataPath.length === 0 || dataPathType.length === 0 || viewPath.length === 0 || viewPathType.length === 0) {
+      throw new Error('expecting 4 data items - dataPath, dataPathType, viewPath, viewPathType');
     }
-    let fieldMaps = new FieldMaps(fieldMapsArray);
-    return fieldMaps;
+    this.assertCorrect(dataPath, dataPathType, viewPath, viewPathType);
+
+    let dataTypePointer: TypedPointer = new DataTypedPointer(dataPath, dataPathType);
+    let viewTypePointer: TypedPointer = new ViewTypedPointer(viewPath, viewPathType);
+    this.fieldMaps.add(new FieldMap(dataTypePointer, viewTypePointer));
   }
 
   private assertCorrect(dataPath: string, dataPathType: string, viewPath: string, viewPathType: string) {
@@ -47,13 +51,13 @@ export abstract class AbstractViewModel {
    * Each of the internal arrays contain 4 items:
    *  [data json pointer, data type at that data pointer, view json pointer, data type at that view pointer]
    */
-  public getFieldMap(): FieldMaps {
-    return this.fieldMapping(this.getRawFieldMappings());
-  }
+  // public getFieldMap(): FieldMaps {
+  //   return this.fieldMapping(this.createFieldMappings());
+  // }
 
   /**
    * Simple way to specify the data / view model mappings.
    * @returns string[][]
    */
-  public abstract getRawFieldMappings(): string[][];
+  public abstract createFieldMappings(): void;
 }

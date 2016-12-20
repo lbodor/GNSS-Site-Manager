@@ -30,11 +30,11 @@ export class HumiditySensorsGroupComponent extends AbstractGroup {
     super();
   }
 
-  getWhatIsTheItemName(): string {
+  getItemName(): string {
     return 'Humidity Sensor';
   }
 
-  getComparator(obj1: HumiditySensorViewModel, obj2: HumiditySensorViewModel): number {
+  compare(obj1: HumiditySensorViewModel, obj2: HumiditySensorViewModel): number {
     if (obj1 === null || obj2 === null) {
       return 0;
     } else {

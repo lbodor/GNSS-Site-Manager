@@ -143,7 +143,7 @@ export class JsonViewModelService {
     let viewModels: T[] = [];
     for (let dataModel of dataModels) {
       let newViewModel: T = new type();
-      let fieldMappings: FieldMaps = newViewModel.getFieldMap();
+      let fieldMappings: FieldMaps = newViewModel.getFieldMaps();
       DataViewTranslatorService.translateD2V(dataModel, newViewModel, fieldMappings);  // humiditySensor
       viewModels.push(newViewModel);
     }
@@ -159,7 +159,7 @@ export class JsonViewModelService {
   private viewToDataModel<T extends AbstractViewModel>(viewModels: T[]): any[] {
     let dataModels: any[] = [];
     for (let viewModel of viewModels) {
-      let fieldMappings: FieldMaps = viewModel.getFieldMap();
+      let fieldMappings: FieldMaps = viewModel.getFieldMaps();
       let dataModel: any = {};
       DataViewTranslatorService.translateV2D(viewModel, dataModel, fieldMappings);
       dataModels.push(dataModel);

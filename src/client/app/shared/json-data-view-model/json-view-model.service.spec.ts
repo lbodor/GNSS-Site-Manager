@@ -5,6 +5,7 @@ import {JsonViewModelService} from './json-view-model.service';
 // import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 import {JsonViewModelServiceSpecData} from './json-view-model.service.spec.data';
 import {SiteLogViewModel} from './view-model/SiteLogViewModel';
+import {MiscUtilsService} from '../global/misc-utils.service';
 
 export function main() {
   let backend: MockBackend = null;
@@ -17,6 +18,7 @@ export function main() {
 
       let injector = ReflectiveInjector.resolveAndCreate([
         JsonViewModelService,
+        MiscUtilsService,
         // JsonixService,
         // ConstantsService,
         BaseRequestOptions,
@@ -105,11 +107,10 @@ export function main() {
       // TODO - introduce HumiditySensorProeprtyType intermediatery
       expect(siteLog.humiditySensors).toBeDefined();
       expect(siteLog.humiditySensors.length).not.toBe(0);
-      expect(siteLog.humiditySensors[0].dateInserted.value[0]).toBe('');
-      expect(siteLog.humiditySensors[0].dateDeleted.value[0]).toBe('');
-      expect(siteLog.humiditySensors[0].deletedReason).toBe('');
       expect(siteLog.humiditySensors[0].humiditySensor.heightDiffToAntenna).toBe(0);
-      expect(siteLog.humiditySensors[0].humiditySensor.calibrationDate.value[0]).toBe('2016-11-30T13:56:58.396Z'); // xx
+      expect(siteLog.humiditySensors[0].humiditySensor.calibrationDate.value[0]).toBe('2016-11-30T13:56:58.396Z');
+      expect(siteLog.humiditySensors[0].humiditySensor.accuracyPercentRelativeHumidity).toBe(22);
+      expect(siteLog.humiditySensors[0].humiditySensor.dataSamplingInterval).toBe(120);
 
       // expect(siteLog.pressureSensors).toBeDefined();
       // expect(siteLog.pressureSensors.length).not.toBe(0);

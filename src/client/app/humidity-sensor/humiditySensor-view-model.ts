@@ -1,4 +1,7 @@
 import {AbstractViewModel} from '../shared/json-data-view-model/view-model/abstract-view-model';
+import {FieldValues} from '../shared/json-data-view-model/field-values';
+import {ValuePointer} from '../shared/json-data-view-model/value-pointer';
+import {MiscUtilsService} from '../shared/global/misc-utils.service';
 
 export class HumiditySensorViewModel extends AbstractViewModel {
   /**
@@ -19,22 +22,30 @@ export class HumiditySensorViewModel extends AbstractViewModel {
 
   /**
    * Constructor - optionally pass in an existing object to clone.  If none then fields are set to defaults.
-   * @param existing
+   *
+   * Three checks in order in (a=a|| existing && existing.a || default):
+   * - the super may set a value,
+   * - or value from existing,
+   * - or use a default value
+   * @param existing - build object from another
    */
   constructor(private existing?: HumiditySensorViewModel) {
     super();
-    this.startDate = existing && existing.startDate || '';
-    this.endDate = existing && existing.endDate || '';
-    this.calibrationDate = existing && existing.calibrationDate || '';
-    this.dataSamplingInterval = existing && existing.dataSamplingInterval || 0;
-    this.accuracyPercentRelativeHumidity = existing && existing.accuracyPercentRelativeHumidity || 0;
-    this.aspiration = existing && existing.aspiration || '';
-    this.notes = existing && existing.notes || '';
-    this.manufacturer = existing && existing.manufacturer || '';
-    this.serialNumber = existing && existing.serialNumber || '';
-    this.heightDiffToAntenna = existing && existing.heightDiffToAntenna || 0;
+    // TODO see if a way to simplify this
+    this.startDate = this.startDate || existing && existing.startDate || '';
+    this.endDate = this.endDate || existing && existing.endDate || '';
+    this.calibrationDate = this.calibrationDate || existing && existing.calibrationDate || '';
+    this.dataSamplingInterval = this.dataSamplingInterval || existing && existing.dataSamplingInterval || 0;
+    this.accuracyPercentRelativeHumidity = this.accuracyPercentRelativeHumidity ||
+      existing && existing.accuracyPercentRelativeHumidity || 0;
+    this.aspiration = this.aspiration || existing && existing.aspiration || '';
+    this.notes = this.notes || existing && existing.notes || '';
+    this.manufacturer = this.manufacturer || existing && existing.manufacturer || '';
+    this.serialNumber = this.serialNumber || existing && existing.serialNumber || '';
+    this.heightDiffToAntenna = this.heightDiffToAntenna || existing && existing.heightDiffToAntenna || 0;
   }
 
+  // TODO - remove type field and use generics instead
   createFieldMappings(): void {
       this.addFieldMapping('/humiditySensor/validTime/abstractTimePrimitive/gml:TimePeriod/beginPosition/value/0',
         'string',
@@ -68,4 +79,39 @@ export class HumiditySensorViewModel extends AbstractViewModel {
       this.addFieldMapping('/humiditySensor/heightDiffToAntenna', 'string',
         '/heightDiffToAntenna', 'number');
   };
+  /**
+   * Child classes return FieldValues to specify any values to set at JSON paths upon creation of a new item.
+   *
+   * These will be created dynamically at runtime since the values could be state or time dependant.
+   *
+   * For example, set the DateInstalled.
+   */
+  getDefaultsValues(): FieldValues {
+    let fieldValues: FieldValues = new FieldValues();
+
+    let presentDT: string = MiscUtilsService.getPresentDateTimeStatic();
+
+    fieldValues.add(new ValuePointer<string>('/startDate', presentDT));
+    fieldValues.add(new ValuePointer<string>('/calibrationDate', presentDT));
+
+    return fieldValues;
+  }
+
+  /**
+   * Child classes return FieldValues to specify any values to set at JSON paths in the object before a new item is
+   * created.  That is, update the last one.
+   *
+   * These will be created dynamically at runtime since the values could be state or time dependant.
+   *
+   * For example, set the DateRemoved.
+   */
+  getBeforeCreatingNewItemValues(): FieldValues {
+    let fieldValues: FieldValues = new FieldValues();
+
+    let presentDT: string = MiscUtilsService.getPresentDateTimeStatic();
+
+    fieldValues.add(new ValuePointer<string>('/endDate', presentDT));
+
+    return fieldValues;
+  }
 }

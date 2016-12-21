@@ -2,7 +2,6 @@ import {Component, Input} from '@angular/core';
 import {MiscUtils} from '../shared/index';
 import {AbstractGroup} from '../shared/abstract-groups-items/AbstractGroup';
 import {HumiditySensorViewModel} from './humiditySensor-view-model';
-import {AbstractViewModel} from '../shared/json-data-view-model/view-model/abstract-view-model';
 
 /**
  * This class represents the SelectSiteComponent for searching and selecting CORS sites.
@@ -12,8 +11,9 @@ import {AbstractViewModel} from '../shared/json-data-view-model/view-model/abstr
   selector: 'gnss-humidity-sensors-group',
   templateUrl: 'humidity-sensors-group.component.html',
 })
-export class HumiditySensorsGroupComponent extends AbstractGroup {
+export class HumiditySensorsGroupComponent extends AbstractGroup<HumiditySensorViewModel> {
   public miscUtils: any = MiscUtils;
+
   @Input()
   set siteLogModel(siteLogModel: any) {
     this.setItemsCollection(siteLogModel.humiditySensors);
@@ -47,43 +47,7 @@ export class HumiditySensorsGroupComponent extends AbstractGroup {
    /* **************************************************
    * Other methods
    */
-  private newItem(): AbstractViewModel {
-    return new HumiditySensorViewModel();
-  }
-
-  /**
-   * Add a new empty humidity sensors as current one and push the 'old' current humidity sensors into previous list
-   */
-  public addNewItem(): void {
-    this.isGroupOpen = true;
-    let presentDT = MiscUtils.getPresentDateTime();
-
-    if (!this.getItemsCollection()) {
-      this.setItemsCollection([]);
-    }
-
-    // Assign present date/time as default value to dateRemoved if it is empty
-    if (this.getItemsCollection().length > 0) {
-      let currentSensor: HumiditySensorViewModel = this.getItemsCollection()[0];
-      if (! currentSensor.endDate) {
-        currentSensor.endDate = presentDT;
-      }
-      console.log('Update last current sensor: ', currentSensor);
-    }
-
-    let newSensor: HumiditySensorViewModel = <HumiditySensorViewModel> this.newItem();
-    let newSensorCopy = MiscUtils.cloneJsonObj(newSensor);
-
-    newSensor.calibrationDate = presentDT;
-    newSensor.startDate = presentDT;
-
-    console.log('New sensor: ', newSensor);
-
-    // Add the new humidity sensor as current one
-    this.getItemsCollection().unshift(newSensor);//newSensorProperty);
-    // Add the new humidity sensor (copy) into the original list so a diff of the fields can be performed
-    this.getItemsOriginalCollection().unshift(newSensorCopy);
-
-    this.newItemEvent();
+  newViewModelItem(): HumiditySensorViewModel {
+    return super.newViewModelItemCreator(HumiditySensorViewModel);
   }
 }

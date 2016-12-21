@@ -1,6 +1,8 @@
 import {GeodesyEvent, EventNames} from '../events-messages/Event';
 import {AbstractViewModel} from '../json-data-view-model/view-model/abstract-view-model';
-export abstract class AbstractGroup {
+import * as _ from 'lodash';
+
+export abstract class AbstractGroup<T extends AbstractViewModel> {
   isGroupOpen: boolean = false;
   hasGroupANewItem: boolean = false;
 
@@ -13,58 +15,12 @@ export abstract class AbstractGroup {
   /**
    * All the items (eg. HumiditySensors)
    */
-  private itemProperties: any[];
+  private itemProperties: T[];
 
   /**
    * A backup of the original list of items.  Used to diff against upon Save.
    */
-  private itemOriginalProperties: any[];
-
-
-  /**
-   * Retrieve the obj.dateInstalled.value[0] or '' if no parts of the path exists.
-   * @param obj
-   * @returns {any}
-   *
-   * TODO - replace by inline Dottie call
-   */
-  public static getDateInstalled(obj: any) {
-    if (obj && obj.dateInstalled
-      && obj.dateInstalled.value
-      && obj.dateInstalled.length > 0) {
-      return obj.dateInstalled.value[0];
-    } else {
-      return '';
-    }
-  }
-
-  /**
-   * Retrieve the obj.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0] or '' if no parts of
-   * the path exists.
-   * @param obj
-   * @returns {any}
-   *
-   * TODO - no longer needed (confirm)
-   */
-  public static getBeginPositionDate(obj: any) {
-    if (obj && obj.validTime && obj.validTime.abstractTimePrimitive && obj.validTime.abstractTimePrimitive['gml:TimePeriod']
-      && obj.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition
-      && obj.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value
-      && obj.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value.length > 0) {
-      return obj.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0];
-    }
-  }
-
-  // TODO - no longer needed (confirm)
-  public static getEndPositionDate(obj: any) {
-    if (obj && obj.validTime && obj.validTime.abstractTimePrimitive && obj.validTime.abstractTimePrimitive['gml:TimePeriod']
-      && obj.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition
-      && obj.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value
-      && obj.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value.length > 0) {
-      return obj.validTime.abstractTimePrimitive['gml:TimePeriod'].endPosition.value[0];
-    }
-  }
-
+  private itemOriginalProperties: T[];
 
   /**
    * This is used in comparators but isn't a comparator - just a helper function.  In the comparator, extract the dates
@@ -88,10 +44,39 @@ export abstract class AbstractGroup {
    */
   abstract getItemName(): string;
 
+  public addNewItem(): void {
+    this.isGroupOpen = true;
+
+    if (!this.getItemsCollection()) {
+      this.setItemsCollection([]);
+    }
+
+    if (this.getItemsCollection().length > 0) {
+      // Let the ViewModels do anything they like with the previous item
+      this.getItemsCollection()[0].populateBeforeCreatingNewItemValues();
+    }
+
+    let newItem: T =  <T> this.newViewModelItem();
+    let newItemCopy = _.cloneDeep(newItem);
+
+    console.log('New View Model: ', newItem);
+
+    // Add the new humidity sensor as current one
+    this.getItemsCollection().unshift(newItem);//newSensorProperty);
+    // Add the new humidity sensor (copy) into the original list so a diff of the fields can be performed
+    this.getItemsOriginalCollection().unshift(newItemCopy);
+
+    this.newItemEvent();
+  }
+
   /**
-   * Add a new item
+   * The child class needs to define this to make an instance of itself.  It should call newViewModelItemCreator().
    */
-  abstract addNewItem(): void;
+  abstract newViewModelItem(): T;
+
+  newViewModelItemCreator<T extends AbstractViewModel>(type: {new(): T ;}): T {
+    return new type();
+  }
 
   /**
    * Subclasses can create a comparator relevant for their data structures.  Reduce size in these by
@@ -100,8 +85,16 @@ export abstract class AbstractGroup {
    * @param obj1
    * @param obj2
    */
-  // abstract compare = (obj1: any, obj2: any): number
   abstract compare(obj1: AbstractViewModel, obj2: AbstractViewModel): number;
+
+  /**
+   * Use the Geodesy object defined comparator in compare() to sort the given collection inline.
+   *
+   * @param collection
+   */
+  private sortUsingComparator(collection: any[]) {
+    collection.sort(this.compare);
+  }
 
   /**
    * Event mechanism to communicate with children.  Simply change the value of this and the children detect the change.
@@ -120,11 +113,11 @@ export abstract class AbstractGroup {
     return this.hasGroupANewItem;
   }
 
-  getItemsCollection(): any {
+  getItemsCollection(): T[] {
     return this.itemProperties;
   }
 
-  getItemsOriginalCollection(): any {
+  getItemsOriginalCollection(): T[] {
     return this.itemOriginalProperties;
   }
 
@@ -167,7 +160,7 @@ export abstract class AbstractGroup {
   /**
    * After a new item is created 'EventNames.newItem' is sent so that item can init itself.
    */
-  newItemEvent() {
+  private newItemEvent() {
     console.log('parent newItemEvent');
     let geodesyEvent: GeodesyEvent = this.getGeodesyEvent();
     geodesyEvent.name = EventNames.newItem;
@@ -184,49 +177,19 @@ export abstract class AbstractGroup {
   }
 
   /** ===============================================================
-   *     Comparators and other sorting
+   *     Helper methods
    *  ===============================================================
    */
 
   /**
-   * Use the Geodesy object defined comparator in compare() to sort the given collection inline.
-   *
-   * @param collection
+   * Returns the date string (YYYY-MM-DD) from the date-time string (YYYY-MM-DDThh:mm:ssZ)
    */
-  sortUsingComparator(collection: any[]) {
-    collection.sort(this.compare);
-  }
-
-  /**
-   * Comparator for sorting by object.validTime.abstractTimePrimitive['gml:TimePeriod'].beginPosition.value[0].
-   * @param obj1
-   * @param obj2
-   * @returns {number}
-   */
-  comparatorEffectiveStartDates(obj1: any, obj2: any) {
-    if (obj1 === null || obj2 === null) {
-      return 0;
-    } else {
-      let date1: string = AbstractGroup.getBeginPositionDate(obj1);
-      let date2: string = AbstractGroup.getBeginPositionDate(obj2);
-      return AbstractGroup.compareDates(date1, date2);
+  public getDate(datetime: string) {
+    if (datetime === null || typeof datetime === 'undefined') {
+      return '';
+    } else if (datetime.length < 10) {
+      return datetime;
     }
+    return datetime.substring(0, 10);
   }
-
-  /**
-   * Comparator for sorting by object.dateInstalled.value[0].
-   * @param obj1
-   * @param obj2
-   * @returns {number}
-   */
-  comparatorDateInstalled(obj1: any, obj2: any) {
-    if (obj1 === null || obj2 === null) {
-      return 0;
-    } else {
-      let date1: string = AbstractGroup.getDateInstalled(obj1);
-      let date2: string = AbstractGroup.getDateInstalled(obj2);
-      return AbstractGroup.compareDates(date1, date2);
-    }
-  }
-
 }

@@ -7,10 +7,12 @@ export class DataViewTranslatorService {
 
   /**
    * Translate from data and view models.
-   * @param data model is input.  Its paths should match the fieldMappings.dataModel
-   * @return view model.  Its paths should match the fieldMappings.viewModel
+   * @param dataModel is input.  Its paths should match the fieldMappings.dataModel
+   * @param viewModel is populated.  It should exist as on object upon entry.  Its paths should match the
+   * fieldMappings.viewModel
+   * @param fieldMappings to/from data and view
    */
-  static translateD2V(dataModel: any, viewModel: any, fieldMappings: FieldMaps): any {
+  static translateD2V<T extends AbstractViewModel>(dataModel: any, viewModel: T, fieldMappings: FieldMaps): void {
     for (let fieldMap of fieldMappings.fieldMaps) {
       let dataTypedPointer: TypedPointer = fieldMap.dataTypedPointer;
       let viewTypedPointer: TypedPointer = fieldMap.viewTypedPointer;
@@ -25,10 +27,12 @@ export class DataViewTranslatorService {
 
   /**
    * Translate from view and data models.
-   * @param view model is input.  Its paths should match the fieldMappings.viewModel
-   * @return data model.  Its paths should match the fieldMappings.dataModel
+   * @param viewModel is input.  Its paths should match the fieldMappings.viewModel
+   * @param dataModel is populated.  It should exist as on object upon entry.  Its paths should match the
+   * fieldMappings.dataModel
+   * @param fieldMappings to/from data and view
    */
-  static translateV2D(viewModel: any, dataModel: any, fieldMappings: FieldMaps): any {
+  static translateV2D<T extends AbstractViewModel>(viewModel: T, dataModel: any, fieldMappings: FieldMaps): any {
     for (let fieldMap of fieldMappings.fieldMaps) {
       let dataTypedPointer: TypedPointer = fieldMap.dataTypedPointer;
       let viewTypedPointer: TypedPointer = fieldMap.viewTypedPointer;

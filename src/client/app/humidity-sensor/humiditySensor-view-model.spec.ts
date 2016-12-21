@@ -1,5 +1,5 @@
 import {HumiditySensorViewModel} from './humiditySensor-view-model';
-import {MiscUtilsService} from '../shared/global/misc-utils.service';
+import {MiscUtils} from '../shared/global/misc-utils';
 export function main() {
   let humiditySensorsViewModel: HumiditySensorViewModel;
 
@@ -20,7 +20,7 @@ export function main() {
       expect(humiditySensorsViewModel.notes).toEqual('');
       expect(humiditySensorsViewModel.serialNumber).toEqual('');
       // The defaults for calibration and start date is now() - drop time when test for this
-      let nowPart: string = MiscUtilsService.getPresentDateTimeStatic().replace(/T.*/,'');
+      let nowPart: string = MiscUtils.getPresentDateTime().replace(/T.*/,'');
       expect(humiditySensorsViewModel.calibrationDate).toBeDefined();
       expect(humiditySensorsViewModel.calibrationDate).not.toEqual('');
       expect(humiditySensorsViewModel.calibrationDate).toContain(nowPart);

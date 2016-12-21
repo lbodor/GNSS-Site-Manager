@@ -2,10 +2,8 @@ import {ReflectiveInjector} from '@angular/core';
 import {BaseRequestOptions, Http} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {JsonViewModelService} from './json-view-model.service';
-// import {SiteLogDataModel} from './data-model/SiteLogDataModel';
 import {JsonViewModelServiceSpecData} from './json-view-model.service.spec.data';
 import {SiteLogViewModel} from './view-model/site-log-view-model';
-import {MiscUtilsService} from '../global/misc-utils.service';
 
 export function main() {
   let backend: MockBackend = null;
@@ -18,7 +16,6 @@ export function main() {
 
       let injector = ReflectiveInjector.resolveAndCreate([
         JsonViewModelService,
-        MiscUtilsService,
         // JsonixService,
         // ConstantsService,
         BaseRequestOptions,

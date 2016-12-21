@@ -1,7 +1,7 @@
 import {AbstractViewModel} from '../shared/json-data-view-model/view-model/abstract-view-model';
 import {FieldValues} from '../shared/json-data-view-model/field-values';
 import {ValuePointer} from '../shared/json-data-view-model/value-pointer';
-import {MiscUtilsService} from '../shared/global/misc-utils.service';
+import {MiscUtils} from '../shared/global/misc-utils';
 
 export class HumiditySensorViewModel extends AbstractViewModel {
   /**
@@ -89,7 +89,7 @@ export class HumiditySensorViewModel extends AbstractViewModel {
   getDefaultsValues(): FieldValues {
     let fieldValues: FieldValues = new FieldValues();
 
-    let presentDT: string = MiscUtilsService.getPresentDateTimeStatic();
+    let presentDT: string = MiscUtils.getPresentDateTime();
 
     fieldValues.add(new ValuePointer<string>('/startDate', presentDT));
     fieldValues.add(new ValuePointer<string>('/calibrationDate', presentDT));
@@ -108,7 +108,7 @@ export class HumiditySensorViewModel extends AbstractViewModel {
   getBeforeCreatingNewItemValues(): FieldValues {
     let fieldValues: FieldValues = new FieldValues();
 
-    let presentDT: string = MiscUtilsService.getPresentDateTimeStatic();
+    let presentDT: string = MiscUtils.getPresentDateTime();
 
     fieldValues.add(new ValuePointer<string>('/endDate', presentDT));
 

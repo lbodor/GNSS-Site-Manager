@@ -5,7 +5,6 @@ import {SiteLogViewModel, ViewSiteLog} from './view-model/site-log-view-model';
 import {AbstractViewModel} from './view-model/abstract-view-model';
 import {DataViewTranslatorService} from './data-view-translator';
 import {FieldMaps} from './field-maps';
-import {MiscUtilsService} from '../global/misc-utils.service';
 
 /**
  * This class provides the service to convert from 'Geodesy data model JSON' (from the XML via Jsonix) to
@@ -14,9 +13,6 @@ import {MiscUtilsService} from '../global/misc-utils.service';
 
 @Injectable()
 export class JsonViewModelService {
-  constructor(private miscUtilsService: MiscUtilsService) {
-    //comment
-  }
 
   /**
    * Given Geodesy data model JSON, translate to view model json.

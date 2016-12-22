@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {MiscUtils} from '../shared/index';
-import {AbstractGroup} from '../shared/abstract-groups-items/AbstractGroup';
+import {AbstractGroup} from '../shared/abstract-groups-items/abstract-group';
 import {HumiditySensorViewModel} from './humidity-sensor-view-model';
 
 /**

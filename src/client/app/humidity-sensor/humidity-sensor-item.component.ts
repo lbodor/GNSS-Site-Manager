@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {AbstractItem} from '../shared/abstract-groups-items/AbstractItem';
+import {AbstractItem} from '../shared/abstract-groups-items/abstract-item';
 import {GeodesyEvent} from '../shared/events-messages/Event';
 import {HumiditySensorViewModel} from './humidity-sensor-view-model';
 import {MiscUtils} from '../shared/global/misc-utils';

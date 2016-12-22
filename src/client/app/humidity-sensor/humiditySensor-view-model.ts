@@ -1,6 +1,4 @@
 import {AbstractViewModel} from '../shared/json-data-view-model/view-model/abstract-view-model';
-import {FieldValues} from '../shared/json-data-view-model/field-values';
-import {ValuePointer} from '../shared/json-data-view-model/value-pointer';
 import {MiscUtils} from '../shared/global/misc-utils';
 
 export class HumiditySensorViewModel extends AbstractViewModel {
@@ -70,23 +68,6 @@ export class HumiditySensorViewModel extends AbstractViewModel {
       this.addFieldMapping('/humiditySensor/heightDiffToAntenna', 'string',
         '/heightDiffToAntenna', 'number');
   };
-  /**
-   * Child classes return FieldValues to specify any values to set at JSON paths upon creation of a new item.
-   *
-   * These will be created dynamically at runtime since the values could be state or time dependant.
-   *
-   * For example, set the DateInstalled.
-   */
-  getDefaultsValues(): FieldValues {
-    let fieldValues: FieldValues = new FieldValues();
-
-    let presentDT: string = MiscUtils.getPresentDateTime();
-
-    fieldValues.add(new ValuePointer<string>('/startDate', presentDT));
-    fieldValues.add(new ValuePointer<string>('/calibrationDate', presentDT));
-
-    return fieldValues;
-  }
 
   /**
    * Called on the 'last' object before creating a new one to populate it with some values such as endDate.

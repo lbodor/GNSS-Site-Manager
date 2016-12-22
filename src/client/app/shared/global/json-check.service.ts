@@ -19,7 +19,7 @@ export class JsonCheckService {
     gnssReceivers: [],
     surveyedLocalTies: [],
     frequencyStandards: [],
-    humiditySensors: [],
+    // humiditySensors: [],
     pressureSensors: [],
     temperatureSensors: [],
     waterVaporSensors: [],
@@ -369,7 +369,7 @@ export class JsonCheckService {
     let objType2: any = MiscUtils.getObjectType(json2);
     if (objType2 === 'Object') {
       for (let attrName in json2) {
-        if (json1.hasOwnProperty(attrName)) {
+        if (json1[attrName] !== undefined && json1.hasOwnProperty(attrName)) {
           this.merge(json1[attrName], json2[attrName]);
         } else {
           json1[attrName] = MiscUtils.cloneJsonObj(json2[attrName]);

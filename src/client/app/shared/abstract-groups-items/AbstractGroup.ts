@@ -1,6 +1,6 @@
 import {GeodesyEvent, EventNames} from '../events-messages/Event';
 import {AbstractViewModel} from '../json-data-view-model/view-model/abstract-view-model';
-import * as _ from 'lodash';
+import * as lodash from 'lodash';
 
 export abstract class AbstractGroup<T extends AbstractViewModel> {
   isGroupOpen: boolean = false;
@@ -57,7 +57,7 @@ export abstract class AbstractGroup<T extends AbstractViewModel> {
     }
 
     let newItem: T =  <T> this.newViewModelItem();
-    let newItemCopy = _.cloneDeep(newItem);
+    let newItemCopy = lodash.cloneDeep(newItem);
 
     console.log('New View Model: ', newItem);
 
@@ -170,22 +170,5 @@ export abstract class AbstractGroup<T extends AbstractViewModel> {
     console.log('parent - remove sensor item: ', itemIndex);
     this.getItemsCollection().splice(itemIndex, 1);
     this.getItemsOriginalCollection().splice(itemIndex, 1);
-  }
-
-  /** ===============================================================
-   *     Helper methods
-   *  ===============================================================
-   */
-
-  /**
-   * Returns the date string (YYYY-MM-DD) from the date-time string (YYYY-MM-DDThh:mm:ssZ)
-   */
-  public getDate(datetime: string) {
-    if (datetime === null || typeof datetime === 'undefined') {
-      return '';
-    } else if (datetime.length < 10) {
-      return datetime;
-    }
-    return datetime.substring(0, 10);
   }
 }

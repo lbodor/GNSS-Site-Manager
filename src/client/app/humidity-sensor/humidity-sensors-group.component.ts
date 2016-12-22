@@ -48,6 +48,6 @@ export class HumiditySensorsGroupComponent extends AbstractGroup<HumiditySensorV
    * Other methods
    */
   newViewModelItem(): HumiditySensorViewModel {
-    return super.newViewModelItemCreator(HumiditySensorViewModel);
+    return new HumiditySensorViewModel();
   }
 }

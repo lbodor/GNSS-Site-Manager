@@ -20,29 +20,20 @@ export class HumiditySensorViewModel extends AbstractViewModel {
   public serialNumber: string;
   public heightDiffToAntenna: number;
 
-  /**
-   * Constructor - optionally pass in an existing object to clone.  If none then fields are set to defaults.
-   *
-   * Three checks in order in (a=a|| existing && existing.a || default):
-   * - the super may set a value,
-   * - or value from existing,
-   * - or use a default value
-   * @param existing - build object from another
-   */
-  constructor(private existing?: HumiditySensorViewModel) {
+  constructor() {
     super();
-    // TODO see if a way to simplify this
-    this.startDate = this.startDate || existing && existing.startDate || '';
-    this.endDate = this.endDate || existing && existing.endDate || '';
-    this.calibrationDate = this.calibrationDate || existing && existing.calibrationDate || '';
-    this.dataSamplingInterval = this.dataSamplingInterval || existing && existing.dataSamplingInterval || 0;
-    this.accuracyPercentRelativeHumidity = this.accuracyPercentRelativeHumidity ||
-      existing && existing.accuracyPercentRelativeHumidity || 0;
-    this.aspiration = this.aspiration || existing && existing.aspiration || '';
-    this.notes = this.notes || existing && existing.notes || '';
-    this.manufacturer = this.manufacturer || existing && existing.manufacturer || '';
-    this.serialNumber = this.serialNumber || existing && existing.serialNumber || '';
-    this.heightDiffToAntenna = this.heightDiffToAntenna || existing && existing.heightDiffToAntenna || 0;
+    let presentDT: string = MiscUtils.getPresentDateTime();
+
+    this.startDate = presentDT;
+    this.calibrationDate = presentDT;
+    this.endDate = '';
+    this.dataSamplingInterval =  0;
+    this.accuracyPercentRelativeHumidity = 0;
+    this.aspiration =  '';
+    this.notes = '';
+    this.manufacturer = '';
+    this.serialNumber = '';
+    this.heightDiffToAntenna = 0;
   }
 
   // TODO - remove type field and use generics instead
@@ -98,20 +89,11 @@ export class HumiditySensorViewModel extends AbstractViewModel {
   }
 
   /**
-   * Child classes return FieldValues to specify any values to set at JSON paths in the object before a new item is
-   * created.  That is, update the last one.
-   *
-   * These will be created dynamically at runtime since the values could be state or time dependant.
-   *
-   * For example, set the DateRemoved.
+   * Called on the 'last' object before creating a new one to populate it with some values such as endDate.
    */
-  getBeforeCreatingNewItemValues(): FieldValues {
-    let fieldValues: FieldValues = new FieldValues();
-
+  setFinalValuesBeforeCreatingNewItem(): void {
     let presentDT: string = MiscUtils.getPresentDateTime();
 
-    fieldValues.add(new ValuePointer<string>('/endDate', presentDT));
-
-    return fieldValues;
+    this.endDate=presentDT;
   }
 }

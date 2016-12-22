@@ -53,7 +53,7 @@ export abstract class AbstractGroup<T extends AbstractViewModel> {
 
     if (this.getItemsCollection().length > 0) {
       // Let the ViewModels do anything they like with the previous item
-      this.getItemsCollection()[0].populateBeforeCreatingNewItemValues();
+      this.getItemsCollection()[0].setFinalValuesBeforeCreatingNewItem();
     }
 
     let newItem: T =  <T> this.newViewModelItem();
@@ -70,13 +70,9 @@ export abstract class AbstractGroup<T extends AbstractViewModel> {
   }
 
   /**
-   * The child class needs to define this to make an instance of itself.  It should call newViewModelItemCreator().
+   * The child class needs to define this to make an instance of itself.
    */
   abstract newViewModelItem(): T;
-
-  newViewModelItemCreator<T extends AbstractViewModel>(type: {new(): T ;}): T {
-    return new type();
-  }
 
   /**
    * Subclasses can create a comparator relevant for their data structures.  Reduce size in these by

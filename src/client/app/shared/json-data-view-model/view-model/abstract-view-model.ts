@@ -1,7 +1,5 @@
 import {FieldMaps, FieldMap} from '../field-maps';
 import {TypedPointer} from '../typed-pointer';
-import {FieldValues} from '../field-values';
-import {JsonPointerService} from '../../json-pointer/json-pointer.service';
 
 export abstract class AbstractViewModel {
   /**
@@ -15,7 +13,6 @@ export abstract class AbstractViewModel {
 
   constructor() {
     this.createFieldMappings();
-    this.populateDefaults();
   }
   /**
    * Client calls this for each data/view field mappings to build fieldMaps.
@@ -48,50 +45,13 @@ export abstract class AbstractViewModel {
   }
 
   /**
-   * Use getDefaultsValues() to create default values in the view model.
-   */
-  populateDefaults(): void {
-    let defaultValues: FieldValues = this.getDefaultsValues();
-
-    for (let defaultValue of defaultValues.valuePointers) {
-        JsonPointerService.set(this, defaultValue.pointer, defaultValue.value);
-    }
-  }
-
-  /**
-   * Call this on the 'last' object before creating a new one to populate it with some values such as endDate.
-   * This uses getBeforeCreatingNewItemValues().
-   */
-  populateBeforeCreatingNewItemValues(): void {
-    let defaultValues: FieldValues = this.getBeforeCreatingNewItemValues();
-
-    for (let defaultValue of defaultValues.valuePointers) {
-      JsonPointerService.set(this, defaultValue.pointer, defaultValue.value);
-    }
-  }
-
-  /**
    * Simple way to specify the data / view model mappings.
    * @returns string[][]
    */
   public abstract createFieldMappings(): void;
 
   /**
-   * Child classes return FieldValues to specify any values to set at JSON paths upon creation of a new item.
-   *
-   * These will be created dynamically at runtime since the values could be state or time dependant.
-   *
-   * For example, set the DateInstalled.
+   * Called on the 'last' object before creating a new one to populate it with some values such as endDate.
    */
-  abstract getDefaultsValues(): FieldValues;
-
-  /**
-   * Child classes return FieldValues to specify any values to set at JSON paths in the last object before a new item is
-   * created.
-   *
-   * These will be created dynamically at runtime since the values could be state or time dependant.
-   *
-   * For example, set the DateRemoved.
-   */
-  abstract getBeforeCreatingNewItemValues(): FieldValues;
+  abstract setFinalValuesBeforeCreatingNewItem(): void;
 }

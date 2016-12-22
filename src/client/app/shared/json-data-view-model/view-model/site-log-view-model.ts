@@ -1,4 +1,4 @@
-import {HumiditySensorViewModel} from '../../../humidity-sensor/humiditySensor-view-model';
+import {HumiditySensorViewModel} from '../../../humidity-sensor/humidity-sensor-view-model';
 
 /**
  * View Model equivalent of ../data-model/SiteLogDataModel

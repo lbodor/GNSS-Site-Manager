@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {SiteLogDataModel, DataSiteLog} from './data-model/site-log-data-model';
-import {HumiditySensorViewModel} from '../../humidity-sensor/humiditySensor-view-model';
+import {HumiditySensorViewModel} from '../../humidity-sensor/humidity-sensor-view-model';
 import {SiteLogViewModel, ViewSiteLog} from './view-model/site-log-view-model';
 import {AbstractViewModel} from './view-model/abstract-view-model';
 import {DataViewTranslatorService} from './data-view-translator';

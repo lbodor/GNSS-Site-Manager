@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MiscUtils} from '../shared/index';
 import {AbstractGroup} from '../shared/abstract-groups-items/AbstractGroup';
-import {HumiditySensorViewModel} from './humiditySensor-view-model';
+import {HumiditySensorViewModel} from './humidity-sensor-view-model';
 
 /**
  * This class represents the SelectSiteComponent for searching and selecting CORS sites.

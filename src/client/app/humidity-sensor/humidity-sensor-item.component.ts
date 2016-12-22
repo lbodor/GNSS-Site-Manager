@@ -1,7 +1,7 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {AbstractItem} from '../shared/abstract-groups-items/AbstractItem';
 import {GeodesyEvent} from '../shared/events-messages/Event';
-import {HumiditySensorViewModel} from './humiditySensor-view-model';
+import {HumiditySensorViewModel} from './humidity-sensor-view-model';
 import {MiscUtils} from '../shared/global/misc-utils';
 
 /**

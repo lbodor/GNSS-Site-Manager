@@ -2,7 +2,7 @@ import {DataViewTranslatorService} from './data-view-translator';
 import {JsonViewModelServiceSpecData} from './json-view-model.service.spec.data';
 import {FieldMaps} from './field-maps';
 import {SiteLogDataModel} from './data-model/site-log-data-model';
-import {HumiditySensorViewModel} from '../../humidity-sensor/humiditySensor-view-model';
+import {HumiditySensorViewModel} from '../../humidity-sensor/humidity-sensor-view-model';
 
 export function main() {
   let completeValidSitelog: SiteLogDataModel = JsonViewModelServiceSpecData.data();
